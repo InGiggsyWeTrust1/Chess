@@ -47,4 +47,5 @@ Temporary Items
 .apdisk
 ChessProject/bin/
 ChessProject/obj/
-ChessProject/.vs/
+ChessProject/
+.vs/ChessProject
