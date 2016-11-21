@@ -8,9 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-/// <summary>
-/// Chess project Alpha.Pre-Beta-Gamma-Delta Test Version: 0.0317.1
-/// </summary>
 namespace ChessProject
 {
     public sealed partial class Cell : UserControl

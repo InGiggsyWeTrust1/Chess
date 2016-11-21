@@ -8,7 +8,7 @@ using System.IO;
 
 namespace ChessProject
 {
-    class ChessmanReader: IDisposable
+    class ChessmanReader : IDisposable
     {
         private FileStream fs;
         private StreamReader sr;
@@ -21,7 +21,7 @@ namespace ChessProject
         /// </summary>
         /// <param name="fileName">Имя файла</param>
         /// <param name="config">sr- чтение, sw- Запись, wr- Чтение и запись</param>
-        public void Open(string fileName,string config)
+        public void Open(string fileName, string config)
         {
             if (isDispose)
             {
@@ -30,12 +30,22 @@ namespace ChessProject
             if (isOpen)
             {
                 throw new Exception("Файл уже открыт");
-            }            
+            }
             switch (config)
             {
-                case "sr": fs = new FileStream(fileName, FileMode.Open); sr = new StreamReader(fs);break;
-                case "sw": fs = new FileStream(fileName, FileMode.Create); sw = new StreamWriter(fs); break;
-                case "wr": fs = new FileStream(fileName, FileMode.Open); sr = new StreamReader(fs); sw = new StreamWriter(fs); break;
+                case "sr":
+                    fs = new FileStream(fileName, FileMode.Open);
+                    sr = new StreamReader(fs);
+                    break;
+                case "sw":
+                    fs = new FileStream(fileName, FileMode.Create);
+                    sw = new StreamWriter(fs);
+                    break;
+                case "wr":
+                    fs = new FileStream(fileName, FileMode.Open);
+                    sr = new StreamReader(fs);
+                    sw = new StreamWriter(fs);
+                    break;
             }
             isOpen = true;
         }
@@ -52,8 +62,7 @@ namespace ChessProject
         {
             if (isDispose)
             {
-                throw new ObjectDisposedException("chRaeder"); 
-
+                throw new ObjectDisposedException("chRaeder");
             }
             if (!isOpen)
             {
@@ -64,16 +73,17 @@ namespace ChessProject
                 throw new ArgumentNullException("config");
             }
 
-            string step; bool result=true;
+            string step;
+            bool result = true;
             if ((step = sr.ReadLine()) != null && CheckOnCorectness(step))
             {
                 int i = 0;
-                chessmanX = (int)step[i] - 65;
-                chessmanY = (int)step[i+1] - 49;
+                chessmanX = (int) step[i] - 65;
+                chessmanY = (int) step[i + 1] - 49;
                 i += 2;
                 while (i < step.Length && !Char.IsLetterOrDigit(step[i])) i++;
-                goToX = (int)step[i] - 65;
-                goToY = (int)step[i+1] - 49;
+                goToX = (int) step[i] - 65;
+                goToY = (int) step[i + 1] - 49;
             }
             else
             {
@@ -93,14 +103,14 @@ namespace ChessProject
         /// <returns></returns>
         private bool CheckOnCorectness(string line)
         {
-            bool result = false; int checker = 0, i = 0;
+            bool result = false;
+            int checker = 0, i = 0;
             for (int j = 0; j < 2 && line.Length - 1 != i; j++)
             {
-
                 while (i < line.Length && !Char.IsLetterOrDigit(line[i])) i++;
                 if (Char.IsLetter(line[i]) && Char.IsDigit(line[i + 1]))
-                    if ((int)line[i] >= 65 && (int)line[i] < 73)
-                        if ((int)line[i+1] >= 48 && (int)line[i + 1] < 57)
+                    if ((int) line[i] >= 65 && (int) line[i] < 73)
+                        if ((int) line[i + 1] >= 48 && (int) line[i + 1] < 57)
                             checker++;
                 i += 2;
             }
@@ -119,13 +129,14 @@ namespace ChessProject
             {
                 throw new ArgumentNullException("config");
             }
-            char[] step=new char[5];
+            char[] step = new char[5];
             step[0] = Convert.ToChar(chessmanX + 65);
             step[1] = Convert.ToChar(chessmanY + 49);
             step[2] = ' ';
             step[3] = Convert.ToChar(goToX + 65);
             step[4] = Convert.ToChar(goToY + 49);
-            if (CheckOnCorectness(new string(step))){
+            if (CheckOnCorectness(new string(step)))
+            {
                 sw.WriteLine(step);
                 sw.Flush();
             }
@@ -140,11 +151,11 @@ namespace ChessProject
         {
             if (isDispose)
             {
-                return ;
+                return;
             }
             isOpen = false;
             isDispose = true;
-            if(fs != null)
+            if (fs != null)
             {
                 fs.Close();
                 fs = null;
