@@ -312,7 +312,7 @@ namespace ChessProject
                 {
                     if (Cells[previosY, previosX].ChessmanColor == Cell.Color.White)
                     {
-                        if (Cells[previosY, previosX].pawnFirstStep == Cell.PawnFirstStep.Yes &&
+                        if (Cells[previosY, previosX].StatuatteFirstStep == Cell.FirstStep.Yes &&
                             previosY - 2 == newY && previosX == newX &&
                             Cells[previosY - 1, previosX].ChessmanType == Cell.Chessman.Null &&
                             Cells[previosY - 2, previosX].ChessmanType == Cell.Chessman.Null)
@@ -323,7 +323,7 @@ namespace ChessProject
                             enPassantY = newY + 1;
                             ChekemateActive = true;
                             Cells[enPassantY, enPassantX].enPassant = Cell.EnPassant.Yes;
-                            Cells[previosY, previosX].pawnFirstStep = Cell.PawnFirstStep.No;
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
                             return true;
                         }
                         else if ((previosX == newX && previosY - 1 == newY &&
@@ -333,13 +333,13 @@ namespace ChessProject
                                  newY == enPassantY && previosY != newY && newX == enPassantX &&
                                  Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (!ChekemateActive))
                         {
-                            Cells[newY, newY].pawnFirstStep = Cell.PawnFirstStep.No;
+                            Cells[newY, newY].StatuatteFirstStep = Cell.FirstStep.No;
                             return true;
                         }
                     }
                     else
                     {
-                        if (Cells[previosY, previosX].pawnFirstStep == Cell.PawnFirstStep.Yes &&
+                        if (Cells[previosY, previosX].StatuatteFirstStep == Cell.FirstStep.Yes &&
                             previosY + 2 == newY && previosX == newX &&
                             Cells[previosY + 1, previosX].ChessmanType == Cell.Chessman.Null &&
                             Cells[previosY + 2, previosX].ChessmanType == Cell.Chessman.Null)
@@ -350,7 +350,7 @@ namespace ChessProject
                             enPassantY = newY - 1;
                             ChekemateActive = false;
                             Cells[enPassantY, enPassantX].enPassant = Cell.EnPassant.Yes;
-                            Cells[previosY, previosX].pawnFirstStep = Cell.PawnFirstStep.No;
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
                             return true;
                         }
                         else if ((previosX == newX && previosY + 1 == newY &&
@@ -360,7 +360,7 @@ namespace ChessProject
                                  newY == enPassantY && previosY != newY && newX == enPassantX &&
                                  Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (ChekemateActive))
                         {
-                            Cells[previosY, previosX].pawnFirstStep = Cell.PawnFirstStep.No;
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
                             return true;
                         }
                     }
@@ -380,7 +380,7 @@ namespace ChessProject
                         if (emptyPath == (Math.Abs(newY - previosY)))
                         {
                             emptyPath = 1;
-                            Cells[previosY, previosX].rookFirstStep = Cell.RookFirstStep.No;
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
                             return true;
                         }
                     }
@@ -396,7 +396,7 @@ namespace ChessProject
                         if (emptyPath == (Math.Abs(newX - previosX)))
                         {
                             emptyPath = 1;
-                            Cells[previosY, previosX].rookFirstStep = Cell.RookFirstStep.No;
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
                             return true;
                         }
                     }
@@ -500,21 +500,21 @@ namespace ChessProject
                          Math.Abs(previosY - newY) == 1 && Math.Abs(previosX - newX) == 1) &&
                         (Cells[newY, newX].ChessmanType == Cell.Chessman.Null && !CheckAttack(newX, newY) ||
                          Cells[newY, newX].ChessmanColor == Enemy) ||
-                        (Cells[previosY, previosX].kingFirstStep == Cell.KingFirstStep.Yes &&
+                        (Cells[previosY, previosX].StatuatteFirstStep == Cell.FirstStep.Yes &&
                          Math.Abs(newX - previosX) == 2 && previosY == newY && !CheckAttack(previosX, previosY, out x) &&
                          ((Cells[previosY, previosX + 1].ChessmanType == Cell.Chessman.Null &&
                            !CheckAttack(previosX + 1, newY) &&
                            Cells[previosY, previosX + 2].ChessmanType == Cell.Chessman.Null &&
                            !CheckAttack(previosX + 2, newY) &&
-                           Cells[previosY, previosX + 3].rookFirstStep == Cell.RookFirstStep.Yes) ||
+                           Cells[previosY, previosX + 3].StatuatteFirstStep == Cell.FirstStep.Yes) ||
                           (Cells[previosY, previosX - 1].ChessmanType == Cell.Chessman.Null &&
                            !CheckAttack(previosX - 1, newY) &&
                            Cells[previosY, previosX - 2].ChessmanType == Cell.Chessman.Null &&
                            !CheckAttack(previosX - 2, newY) &&
                            Cells[previosY, previosX - 3].ChessmanType == Cell.Chessman.Null &&
-                           Cells[previosY, previosX - 4].rookFirstStep == Cell.RookFirstStep.Yes))))
+                           Cells[previosY, previosX - 4].StatuatteFirstStep == Cell.FirstStep.Yes))))
                     {
-                        Cells[previosY, previosX].kingFirstStep = Cell.KingFirstStep.No;
+                        Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
                         return true;
                     }
 

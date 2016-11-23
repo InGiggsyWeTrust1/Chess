@@ -45,31 +45,13 @@ namespace ChessProject
         };
 
         /// <summary>
-        /// Перечисление: первый шаг пешки
+        /// Перечисление: первый ход был или не был
         /// </summary>
-        public enum PawnFirstStep
+        public enum FirstStep
         {
             No,
             Yes
-        };
-
-        /// <summary>
-        /// Перечисление: первый шаг ладьи
-        /// </summary>
-        public enum RookFirstStep
-        {
-            No,
-            Yes
-        };
-
-        /// <summary>
-        /// Перечисление: первый шаг короля
-        /// </summary>
-        public enum KingFirstStep
-        {
-            No,
-            Yes
-        };
+        }
 
         /// <summary>
         /// Перечисление: Атака на проходе
@@ -106,19 +88,9 @@ namespace ChessProject
         public Color ChessmanColor { get; set; }
 
         /// <summary>
-        /// Для пешек: первый ход
+        /// Первый ход фигуры
         /// </summary>
-        public PawnFirstStep pawnFirstStep { get; set; }
-
-        /// <summary>
-        /// Для Ладьи: первый ход
-        /// </summary>
-        public RookFirstStep rookFirstStep { get; set; }
-
-        /// <summary>
-        /// Для Короля: первый ход
-        /// </summary>
-        public KingFirstStep kingFirstStep { get; set; }
+        public FirstStep StatuatteFirstStep { get; set; }
 
         /// <summary>
         /// Метод установки цвета для клетки
@@ -151,14 +123,14 @@ namespace ChessProject
                         ChessmanColor = Color.Black;
                         ChessmanType = Chessman.Pawn;
                         enPassant = EnPassant.No; 
-                        pawnFirstStep = PawnFirstStep.Yes;
+                        StatuatteFirstStep = FirstStep.Yes;
                         break;
                     case 6:
                         BackgroundImage = Properties.Resources.PawnWhite;
                         ChessmanColor = Color.White;
                         ChessmanType = Chessman.Pawn;
                         enPassant = EnPassant.No;
-                        pawnFirstStep = PawnFirstStep.Yes;
+                        StatuatteFirstStep = FirstStep.Yes;
                         break;
                 }
             }
@@ -169,7 +141,7 @@ namespace ChessProject
                 {
                     BackgroundImage = Properties.Resources.RookBlack;
                     ChessmanType = Chessman.Rook;
-                    rookFirstStep = RookFirstStep.Yes;
+                    StatuatteFirstStep = FirstStep.Yes;
                 }
                 else if (_colomnNumber == 1 || _colomnNumber == 6)
                 {
@@ -191,7 +163,7 @@ namespace ChessProject
                 {
                     BackgroundImage = Properties.Resources.KingBlack;
                     ChessmanType = Chessman.King;
-                    kingFirstStep = KingFirstStep.Yes;
+                    StatuatteFirstStep = FirstStep.Yes;
                 }
             }
 
@@ -202,7 +174,7 @@ namespace ChessProject
                 {
                     BackgroundImage = Properties.Resources.RookWhite;
                     ChessmanType = Chessman.Rook;
-                    rookFirstStep = RookFirstStep.Yes;
+                    StatuatteFirstStep = FirstStep.Yes;
                 }
                 else if (_colomnNumber == 1 || _colomnNumber == 6)
                 {
@@ -223,7 +195,7 @@ namespace ChessProject
                 {
                     BackgroundImage = Properties.Resources.KingWhite;
                     ChessmanType = Chessman.King;
-                    kingFirstStep = KingFirstStep.Yes;
+                    StatuatteFirstStep = FirstStep.Yes;
                 }
             }
         }
@@ -247,30 +219,9 @@ namespace ChessProject
         }
 
         /// <summary>
-        /// Конструктор для полей с убитыми фигурами
-        /// </summary>
-        /// <param name="_lineNumber">Номер строки</param>
-        /// <param name="_colomnNumber">Номер столбца</param>
-        /// <param name="_imaginary">Мнимый параметр</param>
-        public Cell(int _lineNumber, int _columnNumber, int _imaginary)
-        {
-            LineNumber = _lineNumber;
-            ColumnNumber = _columnNumber;
-            Size = new Size(50, 50);
-            Location = _imaginary == 1
-                ? new Point(ColumnNumber*50 + 302, LineNumber*50 + 10)
-                : new Point(ColumnNumber*50 + 302, LineNumber*50 + 610);
-            BorderStyle = BorderStyle.Fixed3D;
-            BackgroundImageLayout = ImageLayout.Center;
-            ChessmanType = Chessman.Null;
-            BackColor = _imaginary == 0 ? System.Drawing.Color.DarkOliveGreen : System.Drawing.Color.DodgerBlue; 
-            InitializeComponent();
-        }
-
-        /// <summary>
         /// Конструктор для окна "Выбор фигуры"
         /// </summary>
-        /// <param name="_columnNumber">Номер строки</param>
+        /// <param name="_columnNumber">Номер стол</param>
         /// <param name="Color">Цвет фигуры</param>
         public Cell(int _columnNumber, Cell.Color Color)
         {
@@ -278,7 +229,7 @@ namespace ChessProject
             LineNumber = 0;
             ChessmanColor = Color;
             Size = new Size(50, 50);
-            Location = new Point(40 + ColumnNumber*60, 40);
+            Location = new Point(50 + ColumnNumber*50, 20);
             switch (ColumnNumber)
             {
                 case 0:
