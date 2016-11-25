@@ -12,6 +12,7 @@ namespace ChessProject
 {
     public partial class Chess : Form
     {
+        // This one and this one! OK, I know I know! Holy shit!!! 
         private static readonly ILog Log = LogManager.GetLogger("ChessLog");
         private bool ChekemateActive = false;
 
