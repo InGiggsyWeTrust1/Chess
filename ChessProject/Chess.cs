@@ -71,7 +71,7 @@ namespace ChessProject
         public Chess()
         {
             InitializeComponent();
-            //Log.Info("Start app");
+            Log.Info("Start app");
             KeyPreview = true;
         }
 
@@ -80,11 +80,9 @@ namespace ChessProject
         /// </summary>
         private void SwapColor()
         {
-            //Log.Info("Start: SwapColor();");
             Cell.Color tmp = Iam;
             Iam = Enemy;
             Enemy = tmp;
-            //Log.Info("End: SwapColor();");
         }
 
         /// <summary>
@@ -92,7 +90,6 @@ namespace ChessProject
         /// </summary>
         private void DrawingAlpha()
         {
-            //Log.Info("Start: DrawingAlpha();");
             try
             {
                 for (int j = 0; j < 2; j++)
@@ -135,11 +132,10 @@ namespace ChessProject
                         }
                     }
                 }
-                //Log.Info("End: DrawingAlpha();");
             }
             catch (Exception ex)
             {
-                //Log.Info("DrawingAlpha(); ", ex);
+                Log.Info("DrawingAlpha(); ", ex);
             }
         }
 
@@ -148,7 +144,6 @@ namespace ChessProject
         /// </summary>
         private void Drawing()
         {
-            //Log.Info("Start: Drawing();");
             try
             {
                 var N = 8;
@@ -162,11 +157,10 @@ namespace ChessProject
                 }
 
                 DrawingAlpha();
-                //Log.Info("End: Drawing();");
             }
             catch (Exception ex)
             {
-                //Log.Info("Drawing(); ", ex);
+                Log.Info("Drawing(); ", ex);
             }
         }
 
@@ -178,7 +172,6 @@ namespace ChessProject
         /// <param name="color">Цвет фигуры</param>
         public void ChoiceChessman(int newX, int newY, Cell.Color color)
         {
-            //Log.Info("Start: ChoiceChessman();");
             try
             {
                 ChoiceStatuatte Choice = new ChoiceStatuatte(color);
@@ -207,11 +200,10 @@ namespace ChessProject
                             : Properties.Resources.RookBlack;
                         break;
                 }
-                //Log.Info("End: ChoiceChessman();");
             }
             catch (Exception ex)
             {
-                //Log.Info("ChoiceChessman(); ", ex);
+                Log.Info("ChoiceChessman(); ", ex);
             }
         }
 
@@ -222,7 +214,6 @@ namespace ChessProject
         /// <param name="e"></param>
         private void startGameButton_Click(object sender, EventArgs e)
         {
-            //Log.Info("Start: startGameButton_Click();");
             Drawing();
             startGameButton.Visible = false;
             figureCourses.Visible = true;
@@ -231,10 +222,6 @@ namespace ChessProject
             if (!File.Exists("SaveGame/Save1.txt"))
                 продолжитьToolStripMenuItem.Enabled = false;
             globalReader.Open("globalReader.txt", "sw");
-
-            //SoundPlayer player = new SoundPlayer(Resources.BattleCity);
-            //player.Play();
-            //Log.Info("End: startGameButton_Click();");
         }
 
         /// <summary>
@@ -246,7 +233,6 @@ namespace ChessProject
         /// <param name="newY">Y-координата клетки, на которую хотим поставить фигуру</param>
         private void Movement(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: Movement();");
             bool can = true;
             try
             {
@@ -270,11 +256,10 @@ namespace ChessProject
 
                     globalReader.WriteStep(previosX, previosY, newX, newY);
                 }
-                //Log.Info("End: Movement();");
             }
             catch (Exception ex)
             {
-                //Log.Info("Movement(); ", ex);
+                Log.Info("Movement(); ", ex);
             }
         }
 
@@ -307,7 +292,6 @@ namespace ChessProject
         /// <returns>Возвращает true, когда ход возможен. В противном случае вернет false.</returns>
         private bool ValidationMove(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: ValidationMove();");
             try
             {
                 if (Cells[previosY, previosX].ChessmanType == Cell.Chessman.Pawn)
@@ -532,11 +516,10 @@ namespace ChessProject
                     (Math.Abs(previosY - newY) == 1 && Math.Abs(previosX - newX) == 1))
                     return true;*/
                 }
-                //Log.Info("End: ValidationMove();");
             }
             catch (Exception ex)
             {
-                //Log.Info("ValidationMove(); ", ex);
+                Log.Info("ValidationMove(); ", ex);
             }
             if (!inCheckmate)
                 forValidation = false;
@@ -597,7 +580,6 @@ namespace ChessProject
         /// <param name="newY"></param>
         private void MovementEnPassant(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: MovementEnPassant");
             try
             {
                 bool IsShah = false;
@@ -652,11 +634,10 @@ namespace ChessProject
                     Cells[newY, newX].ChessmanType = Cell.Chessman.Null;
                     Cells[newY, newX].ChessmanColor = Cell.Color.Null;
                 }
-                //Log.Info("End: MovementEnPassant();");
             }
             catch (Exception ex)
             {
-                //Log.Info("MovementEnPassant(); ", ex);
+                Log.Info("MovementEnPassant(); ", ex);
             }
         }
 
@@ -669,7 +650,6 @@ namespace ChessProject
         /// <param name="newY">Y-координата клетки, на которую хотим поставить фигуру</param>
         private void MoveKnigth(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: MoveKnigth();");
             try
             {
                 if (ValidationMove(previosX, previosY, newX, newY))
@@ -678,11 +658,10 @@ namespace ChessProject
                     forValidation = true;
                     FigureCourses("Knigth", previosX, previosY, newX, newY);
                 }
-                //Log.Info("End: MoveKnigth();");
             }
             catch (Exception ex)
             {
-                //Log.Info("MoveKnigth(); ", ex);
+                Log.Info("MoveKnigth(); ", ex);
             }
         }
 
@@ -696,7 +675,6 @@ namespace ChessProject
         /// <param name="newY">Y-координата клетки, на которую хотим поставить фигуру</param>
         private void MovePawn(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: MovePawn();");
             try
             {
                 if (ValidationMove(previosX, previosY, newX, newY))
@@ -719,11 +697,10 @@ namespace ChessProject
                     }
                     FigureCourses("Pawn", previosX, previosY, newX, newY);
                 }
-                //Log.Info("End: MovePawn();");
             }
             catch (Exception ex)
             {
-                //Log.Info("MovePawn(); ", ex);
+                Log.Info("MovePawn(); ", ex);
             }
         }
 
@@ -736,7 +713,6 @@ namespace ChessProject
         /// <param name="newY">Y-координата клетки, на которую хотим поставить фигуру</param>
         private void MoveRook(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: MoveRook();");
             try
             {
                 if (ValidationMove(previosX, previosY, newX, newY))
@@ -745,11 +721,10 @@ namespace ChessProject
                     forValidation = true;
                     FigureCourses("Rook", previosX, previosY, newX, newY);
                 }
-                //Log.Info("End: MoveRook();");
             }
             catch (Exception ex)
             {
-                //Log.Info("MoveRook(); ", ex);
+                Log.Info("MoveRook(); ", ex);
             }
         }
 
@@ -762,7 +737,6 @@ namespace ChessProject
         /// <param name="newY">Y-координата клетки, на которую хотим поставить фигуру</param>
         private void MoveBishop(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: MoveBishop();");
             try
             {
                 if (ValidationMove(previosX, previosY, newX, newY))
@@ -771,12 +745,10 @@ namespace ChessProject
                     forValidation = true;
                     FigureCourses("Bishop", previosX, previosY, newX, newY);
                 }
-
-                //Log.Info("End: MoveBishop();");
             }
             catch (Exception ex)
             {
-                //Log.Info("MoveBishop(); ", ex);
+                Log.Info("MoveBishop(); ", ex);
             }
         }
 
@@ -790,7 +762,6 @@ namespace ChessProject
         /// <param name="newY">Y-координата клетки, на которую хотим поставить фигуру</param>
         private void MoveKing(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: MoveKing();");
             try
             {
                 if (ValidationMove(previosX, previosY, newX, newY))
@@ -821,11 +792,10 @@ namespace ChessProject
                         FigureCourses("King", previosX, previosY, newX, newY);
                     }
                 }
-                //Log.Info("End: MoveKing();");
             }
             catch (Exception ex)
             {
-                //Log.Info("MoveKing(); ", ex);
+                Log.Info("MoveKing(); ", ex);
             }
         }
 
@@ -838,7 +808,6 @@ namespace ChessProject
         /// <param name="newY"></param>
         private void MoveQueen(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: MoveQueen();");
             try
             {
                 if (ValidationMove(previosX, previosY, newX, newY))
@@ -847,11 +816,10 @@ namespace ChessProject
                     forValidation = true;
                     FigureCourses("Queen", previosX, previosY, newX, newY);
                 }
-                //Log.Info("End: MoveQueen();");
             }
             catch (Exception ex)
             {
-                //Log.Info("MoveQueen(); ", ex);
+                Log.Info("MoveQueen(); ", ex);
             }
         }
 
@@ -865,7 +833,6 @@ namespace ChessProject
         /// <param name="newY">Y-координата клетки, на которую хотим поставить фигуру</param>
         private void Move(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: Move();");
             try
             {
                 if (Iam == Cells[newY, newX].ChessmanColor)
@@ -911,11 +878,10 @@ namespace ChessProject
                 }
                 if (forValidation)
                     VNP = 0;
-                //Log.Info("End: Move();");
             }
             catch (Exception ex)
             {
-                //Log.Info("Move(); ", ex);
+               Log.Info("Move(); ", ex);
             }
         }
 
@@ -924,7 +890,6 @@ namespace ChessProject
         /// </summary>
         private bool TraitorChackmate(int previosX, int previosY, int newX, int newY)
         {
-            //Log.Info("Start: TraitorChackmate();");
             try
             {
                 bool result = false;
@@ -967,12 +932,11 @@ namespace ChessProject
                     result = false;
                 }
 
-                //Log.Info("End: TraitorChackmate();");
                 return result;
             }
             catch (Exception ex)
             {
-                //Log.Info("TraitorChackmate(); ", ex);
+                Log.Info("TraitorChackmate(); ", ex);
                 return false;
             }
         }
@@ -1029,11 +993,10 @@ namespace ChessProject
 
                 if (quantityKiller >= 2)
                     EndGame();
-                //Log.Info("End: Checkmate();");
             }
             catch (Exception ex)
             {
-                //Log.Info("Checkmate();", ex);
+                Log.Info("Checkmate();", ex);
             }
             inCheckmate = false;
         }
@@ -1047,7 +1010,6 @@ namespace ChessProject
         /// <returns></returns>
         private bool CheckAttack(int newX, int newY, out int quantityKiller)
         {
-            //Log.Info("Start: CheckAttack();");
             quantityKiller = 0;
             try
             {
@@ -1070,13 +1032,12 @@ namespace ChessProject
                     result = true;
                 if (quantityKiller == 1)
                     СreateTrajectory(KillerPosX, KillerPosY, newX, newY);
-                //Log.Info("End: CheckAttack();");
                 return result;
             }
             catch (Exception ex)
             {
-                //Log.Info("При ошибке вернется false!\n");
-                //Log.Info("CheckAttack(); ", ex);
+                Log.Info("При ошибке вернется false!\n");
+                Log.Info("CheckAttack(); ", ex);
                 return false;
             }
         }
@@ -1090,7 +1051,6 @@ namespace ChessProject
         /// <param name="KingY">Координата короля у</param>
         private void СreateTrajectory(int KillerX, int KillerY, int KingX, int KingY)
         {
-            //Log.Info("Start: СreateTrajectory();");
             try
             {
                 fireArea.Clear();
@@ -1119,11 +1079,10 @@ namespace ChessProject
 
                         break;
                 }
-                //Log.Info("End: СreateTrajectory();");
             }
             catch (Exception ex)
             {
-                //Log.Info("СreateTrajectory(); ", ex);
+                Log.Info("СreateTrajectory(); ", ex);
             }
         }
 
@@ -1135,7 +1094,6 @@ namespace ChessProject
         /// <returns>Возвращает true если в клетку может сходить враг</returns>
         private bool CheckAttack(int newX, int newY)
         {
-            //Log.Info("Start: CheckAttack();");
             try
             {
                 int quantityKiller = 0;
@@ -1166,13 +1124,12 @@ namespace ChessProject
                         }
                 if (quantityKiller != 0)
                     result = true;
-                //Log.Info("End: CheckAttack();");
                 return result;
             }
             catch (Exception ex)
             {
-                //Log.Info("При ошибке вернется false!\n");
-                //Log.Info("CheckAttack(); ", ex);
+                Log.Info("При ошибке вернется false!\n");
+                Log.Info("CheckAttack(); ", ex);
                 return false;
             }
         }
@@ -1183,11 +1140,9 @@ namespace ChessProject
         private void EndGame()
         {
             globalReader.Dispose();
-            //Log.Info("Start: EndGame();");
             EndGame End = new EndGame();
             End.ShowDialog();
             Drawing();
-            //Log.Info("End: EndGame();");
         }
 
         /// <summary>
@@ -1198,7 +1153,6 @@ namespace ChessProject
         /// <returns></returns>
         private bool OnEmbrasure(int defenderWayX, int defenderWayY)
         {
-            //Log.Info("Start: OnEmbrasure();");
             try
             {
                 int i = 0;
@@ -1212,13 +1166,12 @@ namespace ChessProject
                     }
                     i += 2;
                 }
-                //Log.Info("End: OnEmbrasure();");
                 return result;
             }
             catch (Exception ex)
             {
-                //Log.Info("При ошибке вернется false!\n");
-                //Log.Info("OnEmbrasure(); ", ex);
+                Log.Info("При ошибке вернется false!\n");
+                Log.Info("OnEmbrasure(); ", ex);
                 return false;
             }
         }
@@ -1229,9 +1182,7 @@ namespace ChessProject
         /// <param name="kingX"></param>
         /// <param name="kingY"></param>
         private bool ExistKingDefender(int kingX, int kingY)
-        {
-            //Log.Info("Start: ExistKingDefender();");
-            try
+        {try
             {
                 bool result = false;
 
@@ -1249,13 +1200,12 @@ namespace ChessProject
                 {
                     EndGame();
                 }*/
-                //Log.Info("End: ExistKingDefender();");
                 return result;
             }
             catch (Exception ex)
             {
-                //Log.Info("При ошибке вернется false!\n");
-                //Log.Info("ExistKingDefender();", ex);
+                Log.Info("При ошибке вернется false!\n");
+                Log.Info("ExistKingDefender();", ex);
                 return false;
             }
         }
@@ -1267,7 +1217,6 @@ namespace ChessProject
         /// <param name="e"></param>
         private void Cell_Click(object sender, EventArgs e)
         {
-            //Log.Info("Start: Cell_Click();");
             try
             {
                 Cell cell = sender as Cell;
@@ -1286,11 +1235,10 @@ namespace ChessProject
                     Checkmate();
                     Cells[currentY, currentX].BackColor = color;
                 }
-                //Log.Info("End: Cell_Click();");
             }
             catch (Exception ex)
             {
-                //Log.Info("Cell_Click(); ", ex);
+                Log.Info("Cell_Click(); ", ex);
             }
         }
 
