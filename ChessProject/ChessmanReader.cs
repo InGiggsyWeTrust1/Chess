@@ -57,7 +57,7 @@ namespace ChessProject
         /// <param name="chessmanY">Взвращает координату откуда надо сходить Y</param>
         /// <param name="goToX">Взвращает координату куда надо сходить X</param>
         /// <param name="goToY">Взвращает координату куда надо сходить Y</param>
-        /// <returns></returns>
+        /// <returns>Ture - если смог прочитать шаг, иначе - False</returns>
         public bool ReadStep(out int chessmanX, out int chessmanY, out int goToX, out int goToY)
         {
             if (isDispose)
@@ -73,9 +73,9 @@ namespace ChessProject
                 throw new ArgumentNullException("config");
             }
 
-            string step;
+            string step = sr.ReadLine();
             bool result = true;
-            if ((step = sr.ReadLine()) != null && CheckOnCorectness(step))
+            if (step != null && CheckOnCorectness(step))
             {
                 int i = 0;
                 chessmanX = (int) step[i] - 65;
@@ -100,7 +100,7 @@ namespace ChessProject
         /// Проверяет является выражение допустимым для обработки и совершения кода
         /// </summary>
         /// <param name="line">Обрабатываема строка</param>
-        /// <returns></returns>
+        /// <returns>True - если шаг корректный, иначе - false</returns>
         private bool CheckOnCorectness(string line)
         {
             bool result = false;
@@ -123,6 +123,13 @@ namespace ChessProject
             return result;
         }
 
+        /// <summary>
+        /// Запись шагов в файл
+        /// </summary>
+        /// <param name="chessmanX">Координата фигуры по Х</param>
+        /// <param name="chessmanY">Координата фигуры по Y</param>
+        /// <param name="goToX">Координата новой клетки по Х</param>
+        /// <param name="goToY">Координата новой клетки по Y</param>
         public void WriteStep(int chessmanX, int chessmanY, int goToX, int goToY)
         {
             if (sw == null)
