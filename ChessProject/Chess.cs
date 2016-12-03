@@ -12,6 +12,7 @@ namespace ChessProject
 {
     public partial class Chess : Form
     {
+		//hellow gays
         // This one and this one! OK, I know I know! Holy shit!!!
         // Hello, ZholobovSS. How are you?
         private static readonly ILog Log = LogManager.GetLogger("ChessLog");
