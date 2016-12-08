@@ -209,6 +209,8 @@ namespace ChessProject
         {
             LineNumber = _lineNumber;
             ColumnNumber = _columnNumber;
+
+
             Size = new Size(60, 60);
             Location = new Point(ColumnNumber*60 + 262, LineNumber*60 + 120);
             ChessmanType = Chessman.Null;

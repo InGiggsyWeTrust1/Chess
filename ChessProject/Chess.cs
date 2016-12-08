@@ -60,10 +60,10 @@ namespace ChessProject
 
         Color color;
 
-        public Cell.Color Iam = Cell.Color.White;
-        public Cell.Color Enemy = Cell.Color.Black;
+        private Cell.Color Iam = Cell.Color.White;
+        private Cell.Color Enemy = Cell.Color.Black;
 
-        public Cell.Chessman choiceChessman;
+        private Cell.Chessman choiceChessman;
 
         /// <summary>
         /// Основной конструктор
@@ -176,7 +176,7 @@ namespace ChessProject
         /// <param name="newX">Координата пешки по X</param>
         /// <param name="newY">Координата пешки по Y</param>
         /// <param name="color">Цвет фигуры</param>
-        public void ChoiceChessman(int newX, int newY, Cell.Color color)
+        private void ChoiceChessman(int newX, int newY, Cell.Color color)
         {
             //Log.Info("Start: ChoiceChessman();");
             try
