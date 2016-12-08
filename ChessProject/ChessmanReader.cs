@@ -10,9 +10,9 @@ namespace ChessProject
 {
     class ChessmanReader : IDisposable
     {
-        private FileStream fs;
-        private StreamReader sr;
-        private StreamWriter sw;
+        private FileStream fileStream;
+        private StreamReader streamReader;
+        private StreamWriter streamWriter;
         private bool isOpen = false;
         private bool isDispose = false;
 
@@ -20,7 +20,7 @@ namespace ChessProject
         /// Открывает файл
         /// </summary>
         /// <param name="fileName">Имя файла</param>
-        /// <param name="config">sr- чтение, sw- Запись, wr- Чтение и запись</param>
+        /// <param name="config">sr - чтение, sw - Запись, wr - Чтение и запись</param>
         public void Open(string fileName, string config)
         {
             if (isDispose)
@@ -34,17 +34,17 @@ namespace ChessProject
             switch (config)
             {
                 case "sr":
-                    fs = new FileStream(fileName, FileMode.Open);
-                    sr = new StreamReader(fs);
+                    fileStream = new FileStream(fileName, FileMode.Open);
+                    streamReader = new StreamReader(fileStream);
                     break;
                 case "sw":
-                    fs = new FileStream(fileName, FileMode.Create);
-                    sw = new StreamWriter(fs);
+                    fileStream = new FileStream(fileName, FileMode.Create);
+                    streamWriter = new StreamWriter(fileStream);
                     break;
                 case "wr":
-                    fs = new FileStream(fileName, FileMode.Open);
-                    sr = new StreamReader(fs);
-                    sw = new StreamWriter(fs);
+                    fileStream = new FileStream(fileName, FileMode.Open);
+                    streamReader = new StreamReader(fileStream);
+                    streamWriter = new StreamWriter(fileStream);
                     break;
             }
             isOpen = true;
@@ -57,7 +57,7 @@ namespace ChessProject
         /// <param name="chessmanY">Взвращает координату откуда надо сходить Y</param>
         /// <param name="goToX">Взвращает координату куда надо сходить X</param>
         /// <param name="goToY">Взвращает координату куда надо сходить Y</param>
-        /// <returns></returns>
+        /// <returns>Ture - если смог прочитать шаг, иначе - False</returns>
         public bool ReadStep(out int chessmanX, out int chessmanY, out int goToX, out int goToY)
         {
             if (isDispose)
@@ -68,14 +68,14 @@ namespace ChessProject
             {
                 throw new Exception("Попытка обратитьс к файлу который еще не открыт");
             }
-            if (sr == null)
+            if (streamReader == null)
             {
                 throw new ArgumentNullException("config");
             }
 
-            string step;
+            string step = streamReader.ReadLine();
             bool result = true;
-            if ((step = sr.ReadLine()) != null && CheckOnCorectness(step))
+            if (step != null && CheckOnCorectness(step))
             {
                 int i = 0;
                 chessmanX = (int) step[i] - 65;
@@ -100,7 +100,7 @@ namespace ChessProject
         /// Проверяет является выражение допустимым для обработки и совершения кода
         /// </summary>
         /// <param name="line">Обрабатываема строка</param>
-        /// <returns></returns>
+        /// <returns>True - если шаг корректный, иначе - false</returns>
         private bool CheckOnCorectness(string line)
         {
             bool result = false;
@@ -123,9 +123,16 @@ namespace ChessProject
             return result;
         }
 
+        /// <summary>
+        /// Запись шагов в файл
+        /// </summary>
+        /// <param name="chessmanX">Координата фигуры по Х</param>
+        /// <param name="chessmanY">Координата фигуры по Y</param>
+        /// <param name="goToX">Координата новой клетки по Х</param>
+        /// <param name="goToY">Координата новой клетки по Y</param>
         public void WriteStep(int chessmanX, int chessmanY, int goToX, int goToY)
         {
-            if (sw == null)
+            if (streamWriter == null)
             {
                 throw new ArgumentNullException("config");
             }
@@ -137,8 +144,8 @@ namespace ChessProject
             step[4] = Convert.ToChar(goToY + 49);
             if (CheckOnCorectness(new string(step)))
             {
-                sw.WriteLine(step);
-                sw.Flush();
+                streamWriter.WriteLine(step);
+                streamWriter.Flush();
             }
             else
                 throw new ArgumentException("не правильные координаты хода");
@@ -155,10 +162,10 @@ namespace ChessProject
             }
             isOpen = false;
             isDispose = true;
-            if (fs != null)
+            if (fileStream != null)
             {
-                fs.Close();
-                fs = null;
+                fileStream.Close();
+                fileStream = null;
             }
         }
     }

@@ -18,31 +18,25 @@ namespace ChessProject
         public Cell.Chessman Type; //Переменная для возврата типа выбранной фигуры 
         private void Drawing(Cell.Color Color)
         {
-            //Log.Info("Start: Drawing();");
             for (int i = 0; i < 4; i++)
             {
                 cells[i] = new Cell(i, Color) { Parent = this };
                 cells[i].Click += new EventHandler(Click);
             }
-            //Log.Info("End: Drawing();");
         }
 
         public ChoiceStatuatte(Cell.Color color)
         {
-            //Log.Info("Start: ChoiceStatuatte();");
             Color = color;
             Drawing(color);
             InitializeComponent();
-            //Log.Info("End: ChoiceStatuatte();");
         }
 
         private void Click(object sender, EventArgs e)
         {
-            //Log.Info("Start: Click();");
             Cell cell = sender as Cell;
             Type = cell.ChessmanType;
             Dispose();
-            //Log.Info("End: Click();");
         }
     }
 }
