@@ -6,22 +6,34 @@ using System.Media;
 using System.Windows.Forms;
 using ChessProject.Properties;
 using log4net;
+using System.Text;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+using System.Threading;
 using System.IO;
 
 namespace ChessProject
 {
     public partial class Chess : Form
     {
-		//hellow gays
-        // This one and this one! OK, I know I know! Holy shit!!!
-        // Hello, ZholobovSS. How are you?
         private static readonly ILog Log = LogManager.GetLogger("ChessLog");
         private bool ChekemateActive = false;
 
         private ChessmanReader globalReader = new ChessmanReader(); //Обработчик записи в файл
+        private Client client = new Client(); 
 
         private bool CastlingEnebleforBlack = true;
         private bool CastlingEnebleforWhite = true;
+
+        // Переменные для игры по сети
+        private bool OnlineGame = false; // Флаг для игры по сети
+        public static string ServerIp { get; private set; } // IP сервера
+        public static string PlayerName { get; private set; } // Имя игрока 
+        static public int readCurrentX { get; private set; }
+        static public int readCurrentY { get; private set; }
+        static public int readNewX { get; private set; }
+        static public int readNewY { get; private set; }
 
         private Cell[,] Cells = new Cell[8, 8]; //Шахматная доска
 
@@ -55,7 +67,7 @@ namespace ChessProject
         private int WKingPosY = 7;
 
         List<int> fireArea = new List<int>();
-            //Динамический масив где хронятс клетки через которые пройдет фигура котороя пытается убить короля
+            //Динамический масив где хроняться клетки через которые пройдет фигура котороя пытается убить короля
 
         private bool IsShah = false; //Если значение true то объявлен шах
 
@@ -216,6 +228,7 @@ namespace ChessProject
         private void startGameButton_Click(object sender, EventArgs e)
         {
             Drawing();
+            onlineButton.Visible = false;
             startGameButton.Visible = false;
             figureCourses.Visible = true;
             menuStrip.Visible = true;
@@ -224,6 +237,68 @@ namespace ChessProject
                 продолжитьToolStripMenuItem.Enabled = false;
             globalReader.Open("globalReader.txt", "sw");
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void onlineButton_Click(object sender, EventArgs e)
+        {
+            OnlineGame = true;
+            onlineButton.Visible = false;
+            startGameButton.Visible = false;
+            figureCourses.Visible = true;
+            menuStrip.Visible = true;
+            userName.Visible = true;
+            userNameLabel.Visible = true;
+            ipServer.Visible = true;
+            ipServerLabel.Visible = true;
+            if (!File.Exists("SaveGame/Save1.txt"))
+                продолжитьToolStripMenuItem.Enabled = false;
+            globalReader.Open("globalReader.txt", "sw");
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void userName_TextChanged(object sender, EventArgs e)
+        {
+ 
+            ipServer.TextChanged += userName_TextChanged;
+            if (userName.Text != "" && ipServer.Text != "")
+                connectionButton.Visible = true;
+            else
+                connectionButton.Visible = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void connectionButton_Click(object sender, EventArgs e)
+        {
+            PlayerName = userName.Text;
+            ServerIp = ipServer.Text;
+            client.Connection(PlayerName, ServerIp);
+            connectionButton.Visible = false;
+            label1.Text = client.WhoIam;
+            if (client.WhoIam == "w")
+            {
+                Iam = Cell.Color.White;
+                Enemy = Cell.Color.Black;
+            }
+            else
+            {
+                Iam = Cell.Color.Black;
+                Enemy = Cell.Color.White;
+            }
+            label1.Text = client.WhoIam;
+         }
 
         /// <summary>
         /// Метод перестановки фигур
@@ -299,8 +374,7 @@ namespace ChessProject
                                       Cells[previosY - 2, previosX].ChessmanType == Cell.Chessman.Null);
             bool StepOneCell = (previosX == newX && previosY - 1 == newY && Cells[previosY - 1, previosX].ChessmanType == Cell.Chessman.Null);
             bool FightStep = previosY - 1 == newY && ((previosX - 1 == newX || previosX + 1 == newX) && Cells[newY, newX].ChessmanColor == Enemy);
-            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX &&
-                                 Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (!ChekemateActive);
+            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX && Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (!ChekemateActive);
 
             if (FirstStepTwoCells)
             {
@@ -338,8 +412,7 @@ namespace ChessProject
                                       Cells[previosY + 2, previosX].ChessmanType == Cell.Chessman.Null);
             bool StepOneCell = (previosX == newX && previosY + 1 == newY && Cells[previosY + 1, previosX].ChessmanType == Cell.Chessman.Null);
             bool FightStep = previosY + 1 == newY && ((previosX - 1 == newX || previosX + 1 == newX) && Cells[newY, newX].ChessmanColor == Enemy);
-            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX &&
-                                 Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (ChekemateActive);
+            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX && Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (ChekemateActive);
 
             if (FirstStepTwoCells)
             {
@@ -1273,6 +1346,11 @@ namespace ChessProject
                 return false;
             }
         }
+        static public string WhoIam = "w";
+        static public string typeStatuatte;
+        static public string readStep { get; private set; }
+        static public string writeStep { get; private set; }
+
 
         /// <summary>
         /// Метод обработки клика по фигуре
