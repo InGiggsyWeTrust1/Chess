@@ -48,3 +48,7 @@ Temporary Items
 ChessProject/ChessProject/bin/
 ChessProject/ChessProject/obj/
 ChessProject/.vs/ChessProject
+
+ChessServer/ChessServer/bin/
+ChessServer/ChessServer/obj/
+ChessServer/.vs/ChessServer
