@@ -299,7 +299,8 @@ namespace ChessProject
                                       Cells[previosY - 2, previosX].ChessmanType == Cell.Chessman.Null);
             bool StepOneCell = (previosX == newX && previosY - 1 == newY && Cells[previosY - 1, previosX].ChessmanType == Cell.Chessman.Null);
             bool FightStep = previosY - 1 == newY && ((previosX - 1 == newX || previosX + 1 == newX) && Cells[newY, newX].ChessmanColor == Enemy);
-            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX && Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (!ChekemateActive);
+            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX &&
+                                 Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (!ChekemateActive);
 
             if (FirstStepTwoCells)
             {
@@ -337,7 +338,8 @@ namespace ChessProject
                                       Cells[previosY + 2, previosX].ChessmanType == Cell.Chessman.Null);
             bool StepOneCell = (previosX == newX && previosY + 1 == newY && Cells[previosY + 1, previosX].ChessmanType == Cell.Chessman.Null);
             bool FightStep = previosY + 1 == newY && ((previosX - 1 == newX || previosX + 1 == newX) && Cells[newY, newX].ChessmanColor == Enemy);
-            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX && Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (ChekemateActive);
+            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX &&
+                                 Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (ChekemateActive);
 
             if (FirstStepTwoCells)
             {
