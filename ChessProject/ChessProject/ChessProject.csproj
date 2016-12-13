@@ -84,6 +84,7 @@
     <Compile Include="ChoiceStatuatte.Designer.cs">
       <DependentUpon>ChoiceStatuatte.cs</DependentUpon>
     </Compile>
+    <Compile Include="Client.cs" />
     <Compile Include="EndGame.cs">
       <SubType>Form</SubType>
     </Compile>
