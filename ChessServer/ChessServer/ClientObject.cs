@@ -41,11 +41,14 @@ namespace ChessServer
                 string message = GetMessage();
                 username = message;
 
+                WriteUsernameToDb(username);
+
                 message = WhoIam;
                 server.BroadcastMessage(message, this.Id);
                 Console.WriteLine("{0}: присоединился к игре!", username);
 
                 while (true)
+                { 
                     try
                     {
                         message = GetMessage();
@@ -57,13 +60,37 @@ namespace ChessServer
                     catch (Exception ex)
                     {
                         message = String.Format("{0}: покинул игру", username);
+                        server.RemoveConnection(Id);
                         Console.WriteLine(message);
                         break;
                     }
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Console.ReadKey();
+            }
+        }
+
+        public void WriteUsernameToDb(string username)
+        {
+            try
+            {
+                using (var db = new ChessDataBaseDataContext())
+                {
+                    var newPlayer = new T_User
+                    {
+                        Nickname = username
+                    };
+
+                    db.T_Users.InsertOnSubmit(newPlayer);
+                    db.SubmitChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
                 Console.ReadKey();
             }
         }

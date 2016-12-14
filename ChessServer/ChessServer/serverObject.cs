@@ -25,6 +25,7 @@ namespace ChessServer
             ClientObject client = clients.FirstOrDefault(c => c.Id == id);
             if (client != null)
                 clients.Remove(client);
+            Counter = clients.Count;
         }
         protected internal void Listen()
         {
