@@ -30,6 +30,7 @@ namespace ChessServer
         {
             try
             {
+                Console.OutputEncoding = Encoding.Unicode;
                 tcpListener = new TcpListener(IPAddress.Any, 8888);
                 tcpListener.Start();
                 Console.WriteLine("Сервер запущен. Ожидание игроков...");
@@ -47,12 +48,12 @@ namespace ChessServer
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Console.ReadKey();
                 Disconnect();
             }
         }
         protected internal void BroadcastMessage(string message, string id)
         {
-
             if (message == "w" || message == "b")
             {
                 byte[] data = Encoding.Unicode.GetBytes(message);

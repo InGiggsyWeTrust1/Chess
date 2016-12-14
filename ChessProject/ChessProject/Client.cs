@@ -6,6 +6,7 @@ using System.Threading;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ChessProject
 {
@@ -26,8 +27,7 @@ namespace ChessProject
         static NetworkStream stream;
 
         public void Connection(string userName, string ipServer)
-        {
-            
+        {            
             try
             {
                 client = new TcpClient();
@@ -53,7 +53,7 @@ namespace ChessProject
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
         public void ParsingWrightStep(string typeStatuatte, int previosX, int previosY, int newX, int newY)
@@ -73,7 +73,7 @@ namespace ChessProject
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
         public void ReciveMessage()
@@ -93,7 +93,7 @@ namespace ChessProject
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
                 Disconnect();
             }
         }

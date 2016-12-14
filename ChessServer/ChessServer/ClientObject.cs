@@ -36,6 +36,7 @@ namespace ChessServer
         {
             try
             {
+                Console.OutputEncoding = Encoding.Unicode;
                 Stream = client.GetStream();
                 string message = GetMessage();
                 username = message;
@@ -63,6 +64,7 @@ namespace ChessServer
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Console.ReadKey();
             }
         }
 
