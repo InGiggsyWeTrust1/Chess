@@ -14,14 +14,14 @@ namespace ChessProject
     {
         private const int port = 8888;
         public string WhoIam { get; private set; }
-        static public bool MyStep { get; private set; }
+        public bool MyFirstStep { get; private set; }
         static public string writeMessage { get; private set; }
         static public string readStep { get; private set; }
         static public string writeStep { get; private set; }
-        static public int readCurrentX { get; private set; }
-        static public int readCurrentY { get; private set; }
-        static public int readNewX { get; private set; }
-        static public int readNewY { get; private set; }
+        public int readCurrentX { get; private set; }
+        public int readCurrentY { get; private set; }
+        public int readNewX { get; private set; }
+        public int readNewY { get; private set; }
 
         static TcpClient client;
         static NetworkStream stream;
@@ -48,8 +48,7 @@ namespace ChessProject
                     builder.Append(Encoding.Unicode.GetString(dataRead));
                 } while (stream.DataAvailable);
                 ParsingReadStep(builder);
-
-
+                MyFirstStep = true;
             }
             catch (Exception ex)
             {
@@ -68,8 +67,8 @@ namespace ChessProject
                 ParsingWrightStep(typeStatuatte, previosX, previosY, newX, newY);
                 byte[] data = Encoding.Unicode.GetBytes(writeStep);
                 stream.Write(data, 0, data.Length);
-                if (MyStep)
-                    MyStep = false;
+                if (MyFirstStep)
+                    MyFirstStep = false;
             }
             catch (Exception ex)
             {
@@ -89,7 +88,7 @@ namespace ChessProject
                     builder.Append(Encoding.Unicode.GetString(data));
                 } while (stream.DataAvailable);
                 ParsingReadStep(builder);
-
+                MyFirstStep = false;
             }
             catch (Exception ex)
             {
@@ -102,22 +101,18 @@ namespace ChessProject
             if (data[0].ToString() == "w" && data[1].ToString() == "\0")
             {
                 WhoIam = "w";
-                MyStep = true;
             }
             else if (data[0].ToString() == "b" && data[1].ToString() == "\0")
             {
                 WhoIam = "b";
-                MyStep = false;
             }
             if (data[0].ToString() == "w" && data[1].ToString() != "\0")
             {
                 WhoIam = "b";
-                MyStep = true;
             }
             else if (data[0].ToString() == "b" && data[1].ToString() != "\0")
             {
                 WhoIam = "w";
-                MyStep = false;
             }
             if (data[1].ToString() != "\0")
             {

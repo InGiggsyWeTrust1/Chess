@@ -286,6 +286,10 @@ namespace ChessProject
             ServerIp = ipServer.Text;
             client.Connection(PlayerName, ServerIp);
             connectionButton.Visible = false;
+            userName.Visible = false;
+            userNameLabel.Visible = false;
+            ipServer.Visible = false;
+            ipServerLabel.Visible = false;
             label1.Text = client.WhoIam;
             if (client.WhoIam == "w")
             {
@@ -298,6 +302,8 @@ namespace ChessProject
                 Enemy = Cell.Color.White;
             }
             label1.Text = client.WhoIam;
+            OnlineGame = true;
+            Drawing();
          }
 
         /// <summary>
@@ -1346,11 +1352,35 @@ namespace ChessProject
                 return false;
             }
         }
-        static public string WhoIam = "w";
-        static public string typeStatuatte;
-        static public string readStep { get; private set; }
-        static public string writeStep { get; private set; }
 
+        private string WhatIsThisStatuete(int x, int y)
+        {
+            if (Cells[y, x].ChessmanType == Cell.Chessman.Knigth) //Конь
+            {
+                return "n";
+            }
+            else if (Cells[y, x].ChessmanType == Cell.Chessman.Pawn) //Пешка
+            {
+                return "p";
+            }
+            else if (Cells[y, x].ChessmanType == Cell.Chessman.Rook)
+            {
+                return "r";
+            }
+            else if (Cells[y, x].ChessmanType == Cell.Chessman.Bishop)
+            {
+                return "b";
+            }
+            else if (Cells[y, x].ChessmanType == Cell.Chessman.Queen)
+            {
+                return "q";
+            }
+            else if (Cells[y, x].ChessmanType == Cell.Chessman.King)
+            {
+                return "k";
+            }
+            return "";
+        }
 
         /// <summary>
         /// Метод обработки клика по фигуре
@@ -1359,28 +1389,68 @@ namespace ChessProject
         /// <param name="e"></param>
         private void Cell_Click(object sender, EventArgs e)
         {
+
             try
             {
                 Cell cell = sender as Cell;
-                if (firstClick && Iam == cell.ChessmanColor)
+                if (OnlineGame)
                 {
-                    currentX = cell.ColumnNumber;
-                    currentY = cell.LineNumber;
-                    firstClick = false;
-                    color = Cells[currentY, currentX].BackColor;
-                    Cells[currentY, currentX].BackColor = Color.LightSkyBlue;
+                    if (client.MyFirstStep)
+                    {
+                        if (client.WhoIam != "w")
+                        {
+                            client.ReciveMessage();
+                            Move(client.readCurrentX, client.readCurrentY, client.readNewX, client.readNewY);
+                        }
+                    }
+                    else
+                    {
+                        client.ReciveMessage();
+                        Move(client.readCurrentX, client.readCurrentY, client.readNewX, client.readNewY);
+                    }
+                    if ((client.WhoIam == "w" && Iam == Cell.Color.White) || (client.WhoIam == "b" && Iam == Cell.Color.Black))
+                    {
+                        if (firstClick && Iam == cell.ChessmanColor)
+                        {
+                            currentX = cell.ColumnNumber;
+                            currentY = cell.LineNumber;
+                            firstClick = false;
+                            color = Cells[currentY, currentX].BackColor;
+                            Cells[currentY, currentX].BackColor = Color.LightSkyBlue;
+                        }
+                        else if (!firstClick)
+                        {
+                            firstClick = true;
+                            Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
+                            Checkmate();
+                            Cells[currentY, currentX].BackColor = color;
+                            client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX, currentY, cell.ColumnNumber, cell.LineNumber);
+                        }
+                    }
                 }
-                else if (!firstClick)
-                {
-                    firstClick = true;
-                    Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
-                    Checkmate();
-                    Cells[currentY, currentX].BackColor = color;
+                else
+                { 
+                    if (firstClick && Iam == cell.ChessmanColor)
+                    {
+                        currentX = cell.ColumnNumber;
+                        currentY = cell.LineNumber;
+                        firstClick = false;
+                        color = Cells[currentY, currentX].BackColor;
+                        Cells[currentY, currentX].BackColor = Color.LightSkyBlue;
+                    }
+                    else if (!firstClick)
+                    {
+                        firstClick = true;
+                        Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
+                        Checkmate();
+                        Cells[currentY, currentX].BackColor = color;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Log.Info("Cell_Click(); ", ex);
+                MessageBox.Show(ex.Message);
             }
         }
 
