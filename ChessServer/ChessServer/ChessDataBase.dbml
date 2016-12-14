@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ChessDB" Class="ChessDataBaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=DESKTOP-THNO3DF\MSSQL;Initial Catalog=ChessDB;Integrated Security=True" SettingsObjectName="ChessServer.Properties.Settings" SettingsPropertyName="ChessDBConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.T_Course" Member="T_Courses">
+    <Type Name="T_Course">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Number" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Course" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="GameID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="T_Game_T_Course" Member="T_Game" ThisKey="GameID" OtherKey="Id" Type="T_Game" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.T_User" Member="T_Users">
+    <Type Name="T_User">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Nickname" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Association Name="T_User_T_Game" Member="T_Games" ThisKey="Id" OtherKey="Black" Type="T_Game" />
+      <Association Name="T_User_T_Game1" Member="T_Games1" ThisKey="Id" OtherKey="White" Type="T_Game" />
+    </Type>
+  </Table>
+  <Table Name="dbo.T_Game" Member="T_Games">
+    <Type Name="T_Game">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="White" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Black" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="T_Game_T_Course" Member="T_Courses" ThisKey="Id" OtherKey="GameID" Type="T_Course" />
+      <Association Name="T_User_T_Game" Member="T_User" ThisKey="Black" OtherKey="Id" Type="T_User" IsForeignKey="true" />
+      <Association Name="T_User_T_Game1" Member="T_User1" ThisKey="White" OtherKey="Id" Type="T_User" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
