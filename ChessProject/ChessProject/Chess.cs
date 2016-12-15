@@ -30,10 +30,6 @@ namespace ChessProject
         private bool IpValidation = false;
         public static string ServerIp { get; private set; } // IP сервера
         public static string PlayerName { get; private set; } // Имя игрока 
-        public static int readCurrentX { get; private set; }
-        public static int readCurrentY { get; private set; }
-        public static int readNewX { get; private set; }
-        public static int readNewY { get; private set; }
 
         private Cell[,] Cells = new Cell[8, 8]; //Шахматная доска
 
