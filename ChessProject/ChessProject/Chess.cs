@@ -232,6 +232,9 @@ namespace ChessProject
             if (!File.Exists("SaveGame/Save1.txt"))
                 продолжитьToolStripMenuItem.Enabled = false;
             globalReader.Open("globalReader.txt", "sw");
+
+            //Thread thread = new Thread(new ThreadStart(Checkmate));
+            //thread.Start();
         }
 
         /// <summary>
@@ -594,8 +597,63 @@ namespace ChessProject
                    Cells[previosY, previosX - 3].ChessmanType == Cell.Chessman.Null &&
                    Cells[previosY, previosX - 4].StatuatteFirstStep == Cell.FirstStep.Yes))))
             {
-                Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
-                return true;
+                if (BKingPosX == WKingPosX)
+                {
+                    if (Cells[previosY, previosX].ChessmanColor == Cell.Color.White)
+                    {
+                        if (Math.Abs(BKingPosY - newY) > 1)
+                        {
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (Math.Abs(WKingPosY - newY) > 1)
+                        {
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
+                            return true;
+                        }
+                    }
+                }
+                else if (BKingPosY == WKingPosY)
+                {
+                    if (Cells[previosY, previosX].ChessmanColor == Cell.Color.White)
+                    {
+                        if (Math.Abs(BKingPosX - newX) > 1)
+                        {
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (Math.Abs(WKingPosX - newX) > 1)
+                        {
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    if (Cells[previosY, previosX].ChessmanColor == Cell.Color.White)
+                    {
+                        if (Math.Abs(BKingPosX - newX) > 1 || Math.Abs(BKingPosY - newY) > 1)
+                        {
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (Math.Abs(WKingPosX - newX) > 1 || Math.Abs(WKingPosY - newY) > 1)
+                        {
+                            Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
+                            return true;
+                        }
+                    }
+                }
             }
             return false;
         }
@@ -1093,10 +1151,11 @@ namespace ChessProject
         /// </summary>
         private void Checkmate()
         {
-            inCheckmate = true;
-            //Log.Info("Start: Checkmate();");
             try
             {
+                inCheckmate = true;
+                //Log.Info("Start: Checkmate();");
+
                 IsShah = false;
                 int kingX, kingY, quantityKiller = 0, quantityEmpty = 0;
 
@@ -1167,7 +1226,7 @@ namespace ChessProject
                         if (Cells[i, j].ChessmanColor == Enemy)
                         {
                             SwapColor();
-                            if (ValidationMove(j, i, newX, newY) == true)
+                            if (ValidationMove(j, i, newX, newY))
                             {
                                 quantityKiller++;
                                 KillerPosX = j;
@@ -1249,6 +1308,8 @@ namespace ChessProject
                     for (int j = 0; j < 8; j++)
                         if (Cells[j, i].ChessmanColor == Enemy)
                         {
+                            if (Cells[j, i].ChessmanType == Cell.Chessman.King) continue;
+
                             if (ValidationMove(i, j, newX, newY) == true &&
                                 Cells[j, i].ChessmanType != Cell.Chessman.Pawn)
                             {
@@ -1260,7 +1321,9 @@ namespace ChessProject
                                 Cells[newY, newX].ChessmanColor = Iam;
                                 SwapColor();
                                 if (ValidationMove(i, j, newX, newY) == true
+
                                     /*&& Cells[j, i].Chessman != Cell.Chessman.Pawn*/)
+
                                 {
                                     quantityKiller++;
                                 }
@@ -1273,6 +1336,7 @@ namespace ChessProject
                     result = true;
                 return result;
             }
+
             catch (Exception ex)
             {
                 Log.Info("При ошибке вернется false!\n");
