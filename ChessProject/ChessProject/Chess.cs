@@ -22,10 +22,7 @@ namespace ChessProject
         private bool ChekemateActive = false;
 
         private ChessmanReader globalReader = new ChessmanReader(); //Обработчик записи в файл
-        private Client client = new Client(); 
-
-        private bool CastlingEnebleforBlack = true;
-        private bool CastlingEnebleforWhite = true;
+        private Client client = new Client();
 
         // Переменные для игры по сети
         private bool OnlineGame = false; // Флаг для игры по сети
@@ -33,10 +30,10 @@ namespace ChessProject
         private bool IpValidation = false;
         public static string ServerIp { get; private set; } // IP сервера
         public static string PlayerName { get; private set; } // Имя игрока 
-        static public int readCurrentX { get; private set; }
-        static public int readCurrentY { get; private set; }
-        static public int readNewX { get; private set; }
-        static public int readNewY { get; private set; }
+        public static int readCurrentX { get; private set; }
+        public static int readCurrentY { get; private set; }
+        public static int readNewX { get; private set; }
+        public static int readNewY { get; private set; }
 
         private Cell[,] Cells = new Cell[8, 8]; //Шахматная доска
 
@@ -47,7 +44,7 @@ namespace ChessProject
         private bool forValidation = false; // Флажок, показывающий пройденную валидацию (относится к взятию на проходе)
 
         private bool inCheckmate = false;
-            // Флажок, показывающий, что функция "Checkmate(...)" начала выполнение (относиться к взятию на проходе) 
+        // Флажок, показывающий, что функция "Checkmate(...)" начала выполнение (относиться к взятию на проходе) 
 
         private int currentX; //  Текущая позиция координаты Х
         private int currentY; //  Текущая позиция координаты Y
@@ -70,7 +67,7 @@ namespace ChessProject
         private int WKingPosY = 7;
 
         List<int> fireArea = new List<int>();
-            //Динамический масив где хроняться клетки через которые пройдет фигура котороя пытается убить короля
+        //Динамический масив где хроняться клетки через которые пройдет фигура котороя пытается убить короля
 
         private bool IsShah = false; //Если значение true то объявлен шах
 
@@ -288,7 +285,7 @@ namespace ChessProject
             if (pattern.IsMatch(ipServer.Text))
             {
                 IpValidation = true;
-                if (UsernameValidation) 
+                if (UsernameValidation)
                     connectionButton.Visible = true;
             }
             else
@@ -399,13 +396,16 @@ namespace ChessProject
         /// <returns>Возвращает true, когда ход возможен. В противном случае вернет false.</returns>
         private bool PawnWhiteValidation(int previosX, int previosY, int newX, int newY)
         {
-            
-            bool FirstStepTwoCells = (Cells[previosY, previosX].StatuatteFirstStep == Cell.FirstStep.Yes && previosY - 2 == newY && previosX == newX &&
+            bool FirstStepTwoCells = (Cells[previosY, previosX].StatuatteFirstStep == Cell.FirstStep.Yes &&
+                                      previosY - 2 == newY && previosX == newX &&
                                       Cells[previosY - 1, previosX].ChessmanType == Cell.Chessman.Null &&
                                       Cells[previosY - 2, previosX].ChessmanType == Cell.Chessman.Null);
-            bool StepOneCell = (previosX == newX && previosY - 1 == newY && Cells[previosY - 1, previosX].ChessmanType == Cell.Chessman.Null);
-            bool FightStep = previosY - 1 == newY && ((previosX - 1 == newX || previosX + 1 == newX) && Cells[newY, newX].ChessmanColor == Enemy);
-            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX && Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (!ChekemateActive);
+            bool StepOneCell = (previosX == newX && previosY - 1 == newY &&
+                                Cells[previosY - 1, previosX].ChessmanType == Cell.Chessman.Null);
+            bool FightStep = previosY - 1 == newY &&
+                             ((previosX - 1 == newX || previosX + 1 == newX) && Cells[newY, newX].ChessmanColor == Enemy);
+            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX &&
+                                 Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (!ChekemateActive);
 
             if (FirstStepTwoCells)
             {
@@ -437,13 +437,16 @@ namespace ChessProject
         /// <returns>Возвращает true, когда ход возможен. В противном случае вернет false.</returns>
         private bool PawnBlackValidation(int previosX, int previosY, int newX, int newY)
         {
-
-            bool FirstStepTwoCells = (Cells[previosY, previosX].StatuatteFirstStep == Cell.FirstStep.Yes && previosY + 2 == newY && previosX == newX &&
+            bool FirstStepTwoCells = (Cells[previosY, previosX].StatuatteFirstStep == Cell.FirstStep.Yes &&
+                                      previosY + 2 == newY && previosX == newX &&
                                       Cells[previosY + 1, previosX].ChessmanType == Cell.Chessman.Null &&
                                       Cells[previosY + 2, previosX].ChessmanType == Cell.Chessman.Null);
-            bool StepOneCell = (previosX == newX && previosY + 1 == newY && Cells[previosY + 1, previosX].ChessmanType == Cell.Chessman.Null);
-            bool FightStep = previosY + 1 == newY && ((previosX - 1 == newX || previosX + 1 == newX) && Cells[newY, newX].ChessmanColor == Enemy);
-            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX && Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (ChekemateActive);
+            bool StepOneCell = (previosX == newX && previosY + 1 == newY &&
+                                Cells[previosY + 1, previosX].ChessmanType == Cell.Chessman.Null);
+            bool FightStep = previosY + 1 == newY &&
+                             ((previosX - 1 == newX || previosX + 1 == newX) && Cells[newY, newX].ChessmanColor == Enemy);
+            bool StepEnPassant = newY == enPassantY && previosY != newY && newX == enPassantX &&
+                                 Cells[enPassantY, enPassantX].ChessmanType == Cell.Chessman.Null && (ChekemateActive);
 
             if (FirstStepTwoCells)
             {
@@ -456,7 +459,7 @@ namespace ChessProject
                 Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
                 return true;
             }
-            else if (StepOneCell || FightStep || StepEnPassant)
+            if (StepOneCell || FightStep || StepEnPassant)
             {
                 Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
                 return true;
@@ -474,7 +477,7 @@ namespace ChessProject
         /// <returns>Возвращает true, когда ход возможен. В противном случае вернет false.</returns>
         private bool RookQueenHorizontalValidation(int previosX, int previosY, int newX, int newY)
         {
-            directionY = (newY - previosY) / Math.Abs(newY - previosY);
+            directionY = (newY - previosY)/Math.Abs(newY - previosY);
             int j = previosY + directionY;
             while (j != newY && Cells[j, previosX].ChessmanType == Cell.Chessman.Null)
             {
@@ -501,7 +504,7 @@ namespace ChessProject
         /// <returns>Возвращает true, когда ход возможен. В противном случае вернет false.</returns>
         private bool RookQueenVerticalValidation(int previosX, int previosY, int newX, int newY)
         {
-            directionX = (newX - previosX) / Math.Abs(newX - previosX);
+            directionX = (newX - previosX)/Math.Abs(newX - previosX);
             int i = previosX + directionX;
             while (i != newX && Cells[previosY, i].ChessmanType == Cell.Chessman.Null)
             {
@@ -530,8 +533,8 @@ namespace ChessProject
         {
             if (Math.Abs(previosY - newY) == Math.Abs(previosX - newX))
             {
-                directionY = (newY - previosY) / Math.Abs(previosY - newY);
-                directionX = (newX - previosX) / Math.Abs(previosX - newX);
+                directionY = (newY - previosY)/Math.Abs(previosY - newY);
+                directionX = (newX - previosX)/Math.Abs(previosX - newX);
                 int i = previosY + directionY;
                 int j = previosX + directionX;
                 while ((i != newY) && (j != newX) && Cells[i, j].ChessmanType == Cell.Chessman.Null)
@@ -561,9 +564,9 @@ namespace ChessProject
         private bool KnigthValidation(int previosX, int previosY, int newX, int newY)
         {
             if ((previosY + 1 == newY && previosX + 2 == newX) || (previosY + 2 == newY && previosX + 1 == newX) ||
-                        (previosY - 1 == newY && previosX + 2 == newX) || (previosY - 2 == newY && previosX + 1 == newX) ||
-                        (previosY - 1 == newY && previosX - 2 == newX) || (previosY - 2 == newY && previosX - 1 == newX) ||
-                        (previosY + 2 == newY && previosX - 1 == newX) || (previosY + 1 == newY && previosX - 2 == newX))
+                (previosY - 1 == newY && previosX + 2 == newX) || (previosY - 2 == newY && previosX + 1 == newX) ||
+                (previosY - 1 == newY && previosX - 2 == newX) || (previosY - 2 == newY && previosX - 1 == newX) ||
+                (previosY + 2 == newY && previosX - 1 == newX) || (previosY + 1 == newY && previosX - 2 == newX))
                 return true;
             else
                 return false;
@@ -580,24 +583,20 @@ namespace ChessProject
         private bool KingValidation(int previosX, int previosY, int newX, int newY)
         {
             int x;
-            if ((previosY == newY && Math.Abs(previosX - newX) == 1 ||
-                 previosX == newX && Math.Abs(previosY - newY) == 1 ||
-                 Math.Abs(previosY - newY) == 1 && Math.Abs(previosX - newX) == 1) &&
-                (Cells[newY, newX].ChessmanType == Cell.Chessman.Null && !CheckAttack(newX, newY) ||
-                 Cells[newY, newX].ChessmanColor == Enemy) ||
-                (Cells[previosY, previosX].StatuatteFirstStep == Cell.FirstStep.Yes &&
-                 Math.Abs(newX - previosX) == 2 && previosY == newY && !CheckAttack(previosX, previosY, out x) &&
-               ((Cells[previosY, previosX + 1].ChessmanType == Cell.Chessman.Null &&
-                !CheckAttack(previosX + 1, newY) &&
-                 Cells[previosY, previosX + 2].ChessmanType == Cell.Chessman.Null &&
-                !CheckAttack(previosX + 2, newY) &&
-                Cells[previosY, previosX + 3].StatuatteFirstStep == Cell.FirstStep.Yes) ||
-               (Cells[previosY, previosX - 1].ChessmanType == Cell.Chessman.Null &&
-               !CheckAttack(previosX - 1, newY) &&
-                Cells[previosY, previosX - 2].ChessmanType == Cell.Chessman.Null &&
-               !CheckAttack(previosX - 2, newY) &&
-                Cells[previosY, previosX - 3].ChessmanType == Cell.Chessman.Null &&
-                Cells[previosY, previosX - 4].StatuatteFirstStep == Cell.FirstStep.Yes))))
+            if ((((previosY == newY && Math.Abs(previosX - newX) == 1) ||
+                  (previosX == newX && Math.Abs(previosY - newY) == 1) ||
+                  (Math.Abs(previosY - newY) == 1 && Math.Abs(previosX - newX) == 1)) &&
+                 ((Cells[newY, newX].ChessmanType == Cell.Chessman.Null && !CheckAttack(newX, newY)) ||
+                  Cells[newY, newX].ChessmanColor == Enemy)) ||
+                (Cells[previosY, previosX].StatuatteFirstStep == Cell.FirstStep.Yes && Math.Abs(newX - previosX) == 2 &&
+                 previosY == newY && !CheckAttack(previosX, previosY, out x) &&
+                 ((Cells[previosY, previosX + 1].ChessmanType == Cell.Chessman.Null && !CheckAttack(previosX + 1, newY) &&
+                   Cells[previosY, previosX + 2].ChessmanType == Cell.Chessman.Null && !CheckAttack(previosX + 2, newY) &&
+                   Cells[previosY, previosX + 3].StatuatteFirstStep == Cell.FirstStep.Yes) ||
+                  (Cells[previosY, previosX - 1].ChessmanType == Cell.Chessman.Null && !CheckAttack(previosX - 1, newY) &&
+                   Cells[previosY, previosX - 2].ChessmanType == Cell.Chessman.Null && !CheckAttack(previosX - 2, newY) &&
+                   Cells[previosY, previosX - 3].ChessmanType == Cell.Chessman.Null &&
+                   Cells[previosY, previosX - 4].StatuatteFirstStep == Cell.FirstStep.Yes))))
             {
                 Cells[previosY, previosX].StatuatteFirstStep = Cell.FirstStep.No;
                 return true;
@@ -617,73 +616,57 @@ namespace ChessProject
         {
             try
             {
-                bool Pawn = Cells[previosY, previosX].ChessmanType == Cell.Chessman.Pawn;
                 bool White = Cells[previosY, previosX].ChessmanColor == Cell.Color.White;
                 bool Black = Cells[previosY, previosX].ChessmanColor == Cell.Color.Black;
-                bool Rook = Cells[previosY, previosX].ChessmanType == Cell.Chessman.Rook;
                 bool horizontal = previosX == newX;
                 bool vertical = previosY == newY;
-                bool Bishop = Cells[previosY, previosX].ChessmanType == Cell.Chessman.Bishop;
-                bool Queen = Cells[previosY, previosX].ChessmanType == Cell.Chessman.Queen;
-                bool Knigth = Cells[previosY, previosX].ChessmanType == Cell.Chessman.Knigth;
-                bool King = Cells[previosY, previosX].ChessmanType == Cell.Chessman.King;
 
-                if (Pawn)
+                switch (Cells[previosY, previosX].ChessmanType)
                 {
-                    if (White)
-                    {
-                        return PawnWhiteValidation(previosX, previosY, newX, newY);
-                    }
-                    else if (Black)
-                    {          
-                        return PawnBlackValidation(previosX, previosY, newX, newY);
-                    }
-                }
-
-                if (Rook)
-                {
-                    if (horizontal)
-                    {
-                        return RookQueenHorizontalValidation(previosX, previosY, newX, newY);
-                    }
-                    if (vertical)
-                    {
-                        return RookQueenVerticalValidation(previosX, previosY, newX, newY);
-                    }
-                }
-
-                if (Bishop)
-                {
-                    return BishopQueenValidation(previosX, previosY, newX, newY);
-                }
-
-                if (Queen)
-                {
-                    if (horizontal || vertical)
-                    {
+                    case Cell.Chessman.Pawn:
+                        if (White)
+                        {
+                            return PawnWhiteValidation(previosX, previosY, newX, newY);
+                        }
+                        if (Black)
+                        {
+                            return PawnBlackValidation(previosX, previosY, newX, newY);
+                        }
+                        break;
+                    case Cell.Chessman.Rook:
                         if (horizontal)
                         {
-                            return RookQueenHorizontalValidation(previosX, previosY, newX, newY); ;
+                            return RookQueenHorizontalValidation(previosX, previosY, newX, newY);
                         }
                         if (vertical)
                         {
                             return RookQueenVerticalValidation(previosX, previosY, newX, newY);
                         }
-                    }
-                    else
-                    {
+                        break;
+                    case Cell.Chessman.Bishop:
                         return BishopQueenValidation(previosX, previosY, newX, newY);
-                    }
-                }
+                    case Cell.Chessman.Queen:
+                        if (horizontal || vertical)
+                        {
+                            if (horizontal)
+                            {
+                                return RookQueenHorizontalValidation(previosX, previosY, newX, newY);
+                            }
+                            if (vertical)
+                            {
+                                return RookQueenVerticalValidation(previosX, previosY, newX, newY);
+                            }
+                        }
+                        else
+                        {
+                            return BishopQueenValidation(previosX, previosY, newX, newY);
+                        }
+                        break;
+                    case Cell.Chessman.Knigth:
+                        return KnigthValidation(previosX, previosY, newX, newY);
 
-                if (Knigth)
-                {
-                    return KnigthValidation(previosX, previosY, newX, newY);
-                }
-
-                if (King)
-                {
-                    return KingValidation(previosX, previosY, newX, newY);
+                    case Cell.Chessman.King:
+                        return KingValidation(previosX, previosY, newX, newY);
                 }
             }
             catch (Exception ex)
@@ -1007,34 +990,34 @@ namespace ChessProject
                 {
                     ;
                 }
-                else if (Cells[previosY, previosX].ChessmanType == Cell.Chessman.Knigth) //Конь
-                {
-                    MoveKnigth(previosX, previosY, newX, newY);
-                }
-                else if (Cells[previosY, previosX].ChessmanType == Cell.Chessman.Pawn) //Пешка
-                {
-                    MovePawn(previosX, previosY, newX, newY);
-                }
-                else if (Cells[previosY, previosX].ChessmanType == Cell.Chessman.Rook)
-                {
-                    MoveRook(previosX, previosY, newX, newY);
-                }
-                else if (Cells[previosY, previosX].ChessmanType == Cell.Chessman.Bishop)
-                {
-                    MoveBishop(previosX, previosY, newX, newY);
-                }
-                else if (Cells[previosY, previosX].ChessmanType == Cell.Chessman.Queen)
-                {
-                    MoveQueen(previosX, previosY, newX, newY);
-                }
-                else if (Cells[previosY, previosX].ChessmanType == Cell.Chessman.King)
-                {
-                    MoveKing(previosX, previosY, newX, newY);
-                }
-                else if (Cells[previosY, previosX].ChessmanType != Cell.Chessman.Null)
-                {
-                    Movement(previosX, previosY, newX, newY);
-                }
+                else
+                    switch (Cells[previosY, previosX].ChessmanType)
+                    {
+                        case Cell.Chessman.Knigth:
+                            MoveKnigth(previosX, previosY, newX, newY);
+                            break;
+                        case Cell.Chessman.Pawn:
+                            MovePawn(previosX, previosY, newX, newY);
+                            break;
+                        case Cell.Chessman.Rook:
+                            MoveRook(previosX, previosY, newX, newY);
+                            break;
+                        case Cell.Chessman.Bishop:
+                            MoveBishop(previosX, previosY, newX, newY);
+                            break;
+                        case Cell.Chessman.Queen:
+                            MoveQueen(previosX, previosY, newX, newY);
+                            break;
+                        case Cell.Chessman.King:
+                            MoveKing(previosX, previosY, newX, newY);
+                            break;
+                        default:
+                            if (Cells[previosY, previosX].ChessmanType != Cell.Chessman.Null)
+                            {
+                                Movement(previosX, previosY, newX, newY);
+                            }
+                            break;
+                    }
                 if (VNP != 1 && forValidation)
                 {
                     if (enPassantYY > 0)
@@ -1049,7 +1032,7 @@ namespace ChessProject
             }
             catch (Exception ex)
             {
-               Log.Info("Move(); ", ex);
+                Log.Info("Move(); ", ex);
             }
         }
 
@@ -1350,7 +1333,8 @@ namespace ChessProject
         /// <param name="kingX"></param>
         /// <param name="kingY"></param>
         private bool ExistKingDefender(int kingX, int kingY)
-        {try
+        {
+            try
             {
                 bool result = false;
 
@@ -1380,29 +1364,20 @@ namespace ChessProject
 
         private string WhatIsThisStatuete(int x, int y)
         {
-            if (Cells[y, x].ChessmanType == Cell.Chessman.Knigth) //Конь
+            switch (Cells[y, x].ChessmanType)
             {
-                return "n";
-            }
-            else if (Cells[y, x].ChessmanType == Cell.Chessman.Pawn) //Пешка
-            {
-                return "p";
-            }
-            else if (Cells[y, x].ChessmanType == Cell.Chessman.Rook)
-            {
-                return "r";
-            }
-            else if (Cells[y, x].ChessmanType == Cell.Chessman.Bishop)
-            {
-                return "b";
-            }
-            else if (Cells[y, x].ChessmanType == Cell.Chessman.Queen)
-            {
-                return "q";
-            }
-            else if (Cells[y, x].ChessmanType == Cell.Chessman.King)
-            {
-                return "k";
+                case Cell.Chessman.Knigth:
+                    return "n";
+                case Cell.Chessman.Pawn:
+                    return "p";
+                case Cell.Chessman.Rook:
+                    return "r";
+                case Cell.Chessman.Bishop:
+                    return "b";
+                case Cell.Chessman.Queen:
+                    return "q";
+                case Cell.Chessman.King:
+                    return "k";
             }
             return "";
         }
@@ -1501,7 +1476,8 @@ namespace ChessProject
                 Cell cell = sender as Cell;
                 if (OnlineGame)
                 {
-                    if ((client.WhoIam == "w" && Iam == Cell.Color.White) || (client.WhoIam == "b" && Iam == Cell.Color.Black && !client.MyFirstStep))
+                    if ((client.WhoIam == "w" && Iam == Cell.Color.White) ||
+                        (client.WhoIam == "b" && Iam == Cell.Color.Black && !client.MyFirstStep))
                     {
                         if (firstClick && Iam == cell.ChessmanColor)
                         {
@@ -1518,14 +1494,15 @@ namespace ChessProject
                             Checkmate();
                             Cells[currentY, currentX].BackColor = color;
                             if (currentX == cell.ColumnNumber && currentY == cell.LineNumber)
-                                ;
+                            ;
                             else
-                                client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX, currentY, cell.ColumnNumber, cell.LineNumber);
+                                client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
+                                    currentY, cell.ColumnNumber, cell.LineNumber);
                         }
                     }
                 }
                 else
-                { 
+                {
                     if (firstClick && Iam == cell.ChessmanColor)
                     {
                         currentX = cell.ColumnNumber;
@@ -1641,8 +1618,6 @@ namespace ChessProject
             }
             globalReader.Dispose();
             ChekemateActive = false;
-            CastlingEnebleforBlack = true;
-            CastlingEnebleforWhite = true;
             VNP = 0;
             forValidation = false;
             inCheckmate = false;
