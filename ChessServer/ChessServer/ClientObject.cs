@@ -41,7 +41,7 @@ namespace ChessServer
                 string message = GetMessage();
                 username = message;
 
-                WriteUsernameToDb(username);
+                //WriteUsernameToDb(username);
 
                 message = WhoIam;
                 server.BroadcastMessage(message, this.Id);
@@ -52,9 +52,9 @@ namespace ChessServer
                     try
                     {
                         message = GetMessage();
-                        message = String.Format("{0}{1}", WhoIam, message);
+                        message = String.Format(message);
                         serverMessage = String.Format("{0}: {1}", username, message);
-                        Console.WriteLine(message);
+                        Console.WriteLine(serverMessage);
                         server.BroadcastMessage(message, this.Id);
                     }
                     catch (Exception ex)
@@ -73,7 +73,7 @@ namespace ChessServer
             }
         }
 
-        public void WriteUsernameToDb(string username)
+        /*public void WriteUsernameToDb(string username)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace ChessServer
                 Console.WriteLine(ex);
                 Console.ReadKey();
             }
-        }
+        }*/
 
         private string GetMessage()
         {

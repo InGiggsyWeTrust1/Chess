@@ -151,6 +151,7 @@
             this.ipServer.Size = new System.Drawing.Size(201, 39);
             this.ipServer.TabIndex = 6;
             this.ipServer.Visible = false;
+            this.ipServer.TextChanged += new System.EventHandler(this.ipServer_TextChanged);
             // 
             // userNameLabel
             // 

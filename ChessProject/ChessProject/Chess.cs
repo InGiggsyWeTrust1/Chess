@@ -6,6 +6,7 @@ using System.Media;
 using System.Windows.Forms;
 using ChessProject.Properties;
 using log4net;
+using System.Text.RegularExpressions;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
@@ -28,6 +29,8 @@ namespace ChessProject
 
         // Переменные для игры по сети
         private bool OnlineGame = false; // Флаг для игры по сети
+        private bool UsernameValidation = false;
+        private bool IpValidation = false;
         public static string ServerIp { get; private set; } // IP сервера
         public static string PlayerName { get; private set; } // Имя игрока 
         static public int readCurrentX { get; private set; }
@@ -257,7 +260,6 @@ namespace ChessProject
             if (!File.Exists("SaveGame/Save1.txt"))
                 продолжитьToolStripMenuItem.Enabled = false;
             globalReader.Open("globalReader.txt", "sw");
-
         }
 
         /// <summary>
@@ -267,12 +269,33 @@ namespace ChessProject
         /// <param name="e"></param>
         private void userName_TextChanged(object sender, EventArgs e)
         {
- 
-            ipServer.TextChanged += userName_TextChanged;
-            if (userName.Text != "" && ipServer.Text != "")
-                connectionButton.Visible = true;
+            if (userName.Text != "")
+            {
+                UsernameValidation = true;
+                if (IpValidation)
+                    connectionButton.Visible = true;
+            }
             else
+            {
+                UsernameValidation = false;
                 connectionButton.Visible = false;
+            }
+        }
+
+        private void ipServer_TextChanged(object sender, EventArgs e)
+        {
+            Regex pattern = new Regex(@"\b((\d|\d\d|1\d\d|2[0-5][0-5])(\.|\b)){4}");
+            if (pattern.IsMatch(ipServer.Text))
+            {
+                IpValidation = true;
+                if (UsernameValidation) 
+                    connectionButton.Visible = true;
+            }
+            else
+            {
+                IpValidation = false;
+                connectionButton.Visible = false;
+            }
         }
 
         /// <summary>
@@ -304,7 +327,9 @@ namespace ChessProject
             label1.Text = client.WhoIam;
             OnlineGame = true;
             Drawing();
-         }
+            Thread ChessReceiveThread = new Thread(new ThreadStart(ChessReceiveMessage));
+            ChessReceiveThread.Start();
+        }
 
         /// <summary>
         /// Метод перестановки фигур
@@ -1382,6 +1407,88 @@ namespace ChessProject
             return "";
         }
 
+        private void ChessReceiveMessage()
+        {
+            while (true)
+            {
+                if (client.MyFirstStep)
+                {
+                    if (client.WhoIam != "w")
+                    {
+                        client.ReciveMessage();
+                        if (client.WhoIam == "w")
+                        {
+                            Iam = Cell.Color.Black;
+                            Enemy = Cell.Color.White;
+                        }
+                        else
+                        {
+                            Iam = Cell.Color.White;
+                            Enemy = Cell.Color.Black;
+                        }
+                        Move(client.readCurrentX, client.readCurrentY, client.readNewX, client.readNewY);
+                        switch (client.WhatIsThisStatuete)
+                        {
+                            case "p":
+                                Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Pawn;
+                                break;
+                            case "r":
+                                Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Rook;
+                                break;
+                            case "n":
+                                Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Knigth;
+                                break;
+                            case "b":
+                                Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Bishop;
+                                break;
+                            case "q":
+                                Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Queen;
+                                break;
+                            case "k":
+                                Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.King;
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    client.ReciveMessage();
+                    if (client.WhoIam == "w")
+                    {
+                        Iam = Cell.Color.Black;
+                        Enemy = Cell.Color.White;
+                    }
+                    else
+                    {
+                        Iam = Cell.Color.White;
+                        Enemy = Cell.Color.Black;
+                    }
+                    Move(client.readCurrentX, client.readCurrentY, client.readNewX, client.readNewY);
+                    switch (client.WhatIsThisStatuete)
+                    {
+                        case "p":
+                            Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Pawn;
+                            break;
+                        case "r":
+                            Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Rook;
+                            break;
+                        case "n":
+                            Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Knigth;
+                            break;
+                        case "b":
+                            Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Bishop;
+                            break;
+                        case "q":
+                            Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Queen;
+                            break;
+                        case "k":
+                            Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.King;
+                            break;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Метод обработки клика по фигуре
         /// </summary>
@@ -1389,26 +1496,12 @@ namespace ChessProject
         /// <param name="e"></param>
         private void Cell_Click(object sender, EventArgs e)
         {
-
             try
             {
                 Cell cell = sender as Cell;
                 if (OnlineGame)
                 {
-                    if (client.MyFirstStep)
-                    {
-                        if (client.WhoIam != "w")
-                        {
-                            client.ReciveMessage();
-                            Move(client.readCurrentX, client.readCurrentY, client.readNewX, client.readNewY);
-                        }
-                    }
-                    else
-                    {
-                        client.ReciveMessage();
-                        Move(client.readCurrentX, client.readCurrentY, client.readNewX, client.readNewY);
-                    }
-                    if ((client.WhoIam == "w" && Iam == Cell.Color.White) || (client.WhoIam == "b" && Iam == Cell.Color.Black))
+                    if ((client.WhoIam == "w" && Iam == Cell.Color.White) || (client.WhoIam == "b" && Iam == Cell.Color.Black && !client.MyFirstStep))
                     {
                         if (firstClick && Iam == cell.ChessmanColor)
                         {
@@ -1424,7 +1517,10 @@ namespace ChessProject
                             Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
                             Checkmate();
                             Cells[currentY, currentX].BackColor = color;
-                            client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX, currentY, cell.ColumnNumber, cell.LineNumber);
+                            if (currentX == cell.ColumnNumber && currentY == cell.LineNumber)
+                                ;
+                            else
+                                client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX, currentY, cell.ColumnNumber, cell.LineNumber);
                         }
                     }
                 }

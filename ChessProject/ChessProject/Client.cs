@@ -15,6 +15,7 @@ namespace ChessProject
         private const int port = 8888;
         public string WhoIam { get; private set; }
         public bool MyFirstStep { get; private set; }
+        public string WhatIsThisStatuete { get; private set; }
         static public string writeMessage { get; private set; }
         static public string readStep { get; private set; }
         static public string writeStep { get; private set; }
@@ -179,8 +180,29 @@ namespace ChessProject
                         else
                             readNewY = Convert.ToInt32(data[i].ToString()) - 1;
                     }
-
                 }
+                switch (data[5].ToString())
+                {
+                    case "p":
+                        WhatIsThisStatuete = "p";
+                        break;
+                    case "r":
+                        WhatIsThisStatuete = "r";
+                        break;
+                    case "n":
+                        WhatIsThisStatuete = "n";
+                        break;
+                    case "b":
+                        WhatIsThisStatuete = "b";
+                        break;
+                    case "q":
+                        WhatIsThisStatuete = "q";
+                        break;
+                    case "k":
+                        WhatIsThisStatuete = "k";
+                        break;
+                }
+
             }
         }
         static void Disconnect()
