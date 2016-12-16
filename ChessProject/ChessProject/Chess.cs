@@ -105,18 +105,18 @@ namespace ChessProject
                 {
                     for (int i = 0; i < 8; i++)
                     {
-                        char[] alpha = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
-                        MarkerA[i + 8*j] = new Label();
-                        this.Controls.Add(MarkerA[i + 8*j]);
-                        MarkerA[i + 8*j].Text = alpha[i].ToString();
-                        MarkerA[i + 8*j].Size = new Size(30, 30);
+                        char[] alpha = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
+                        MarkerA[i + 8 * j] = new Label();
+                        this.Controls.Add(MarkerA[i + 8 * j]);
+                        MarkerA[i + 8 * j].Text = alpha[i].ToString();
+                        MarkerA[i + 8 * j].Size = new Size(30, 30);
                         switch (j)
                         {
                             case 0:
-                                MarkerA[i + 8*j].Location = new Point(i*60 + 285, 100);
+                                MarkerA[i + 8 * j].Location = new Point(i * 60 + 285, 100);
                                 break;
                             case 1:
-                                MarkerA[i + 8*j].Location = new Point(i*60 + 285, 610);
+                                MarkerA[i + 8 * j].Location = new Point(i * 60 + 285, 610);
                                 break;
                         }
                     }
@@ -126,17 +126,17 @@ namespace ChessProject
                 {
                     for (int i = 0; i < 8; i++)
                     {
-                        MarkerN[i + 8*j] = new Label();
-                        this.Controls.Add(MarkerN[i + 8*j]);
-                        MarkerN[i + 8*j].Text = (i + 1).ToString();
-                        MarkerN[i + 8*j].Size = new Size(60, 60);
+                        MarkerN[i + 8 * j] = new Label();
+                        this.Controls.Add(MarkerN[i + 8 * j]);
+                        MarkerN[i + 8 * j].Text = (i + 1).ToString();
+                        MarkerN[i + 8 * j].Size = new Size(60, 60);
                         switch (j)
                         {
                             case 0:
-                                MarkerN[i + 8*j].Location = new Point(235, i*60 + 135);
+                                MarkerN[i + 8 * j].Location = new Point(235, i * 60 + 135);
                                 break;
                             case 1:
-                                MarkerN[i + 8*j].Location = new Point(760, i*60 + 135);
+                                MarkerN[i + 8 * j].Location = new Point(760, i * 60 + 135);
                                 break;
                         }
                     }
@@ -160,7 +160,7 @@ namespace ChessProject
                 {
                     for (var j = 0; j < N; j++)
                     {
-                        Cells[i, j] = new Cell(i, j) {Parent = this};
+                        Cells[i, j] = new Cell(i, j) { Parent = this };
                         Cells[i, j].Click += new EventHandler(Cell_Click);
                     }
                 }
@@ -376,7 +376,7 @@ namespace ChessProject
         /// <param name="newY">Y-координата клетки, на которую поставили фигуру</param>
         private void FigureCourses(string typeStatuatte, int previosX, int previosY, int newX, int newY)
         {
-            char[] alpha = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+            char[] alpha = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
             string previosCell = alpha[previosX].ToString() + (previosY + 1).ToString();
             string newCell = alpha[newX].ToString() + (newY + 1).ToString();
             string color;
@@ -476,7 +476,7 @@ namespace ChessProject
         /// <returns>Возвращает true, когда ход возможен. В противном случае вернет false.</returns>
         private bool RookQueenHorizontalValidation(int previosX, int previosY, int newX, int newY)
         {
-            directionY = (newY - previosY)/Math.Abs(newY - previosY);
+            directionY = (newY - previosY) / Math.Abs(newY - previosY);
             int j = previosY + directionY;
             while (j != newY && Cells[j, previosX].ChessmanType == Cell.Chessman.Null)
             {
@@ -503,7 +503,7 @@ namespace ChessProject
         /// <returns>Возвращает true, когда ход возможен. В противном случае вернет false.</returns>
         private bool RookQueenVerticalValidation(int previosX, int previosY, int newX, int newY)
         {
-            directionX = (newX - previosX)/Math.Abs(newX - previosX);
+            directionX = (newX - previosX) / Math.Abs(newX - previosX);
             int i = previosX + directionX;
             while (i != newX && Cells[previosY, i].ChessmanType == Cell.Chessman.Null)
             {
@@ -532,8 +532,8 @@ namespace ChessProject
         {
             if (Math.Abs(previosY - newY) == Math.Abs(previosX - newX))
             {
-                directionY = (newY - previosY)/Math.Abs(previosY - newY);
-                directionX = (newX - previosX)/Math.Abs(previosX - newX);
+                directionY = (newY - previosY) / Math.Abs(previosY - newY);
+                directionX = (newX - previosX) / Math.Abs(previosX - newX);
                 int i = previosY + directionY;
                 int j = previosX + directionX;
                 while ((i != newY) && (j != newX) && Cells[i, j].ChessmanType == Cell.Chessman.Null)
@@ -897,10 +897,20 @@ namespace ChessProject
                     {
                         Movement(previosX, previosY, newX, newY);
                         forValidation = true;
-                        if (newY == 0 && Cells[newY, newX].ChessmanColor == Cell.Color.White)
-                            ChoiceChessman(newX, newY, Cells[newY, newX].ChessmanColor);
-                        if (newY == 7 && Cells[newY, newX].ChessmanColor == Cell.Color.Black)
-                            ChoiceChessman(newX, newY, Cells[newY, newX].ChessmanColor);
+                        if (OnlineGame)
+                        {
+                            if (newY == 0 && Cells[newY, newX].ChessmanColor == Cell.Color.White && client.WhoIam == "w")
+                                ChoiceChessman(newX, newY, Cells[newY, newX].ChessmanColor);
+                            if (newY == 7 && Cells[newY, newX].ChessmanColor == Cell.Color.Black && client.WhoIam == "b")
+                                ChoiceChessman(newX, newY, Cells[newY, newX].ChessmanColor);
+                        }
+                        else
+                        {
+                            if (newY == 0 && Cells[newY, newX].ChessmanColor == Cell.Color.White)
+                                ChoiceChessman(newX, newY, Cells[newY, newX].ChessmanColor);
+                            if (newY == 7 && Cells[newY, newX].ChessmanColor == Cell.Color.Black)
+                                ChoiceChessman(newX, newY, Cells[newY, newX].ChessmanColor);
+                        }
                     }
                     FigureCourses("Pawn", previosX, previosY, newX, newY);
                 }
@@ -1187,7 +1197,10 @@ namespace ChessProject
 
                 if (IsShah)
                 {
-                    MessageBox.Show("\tШAX");
+                    if (OnlineGame)
+                        MessageBox.Show("ВАМ ОБЪЯВЛЕН ШAX");
+                    else
+                        MessageBox.Show("ШAX");
                     bool DefenderExisist = ExistKingDefender(kingX, kingY);
 
                     if (quantityKiller == 1 && quantityEmpty == 0 &&
@@ -1271,10 +1284,10 @@ namespace ChessProject
                     case Cell.Chessman.Queen:
                         int tY = 0, tX = 0, i = 2;
                         if (KingY - KillerY != 0)
-                            tY = (KingY - KillerY)/Math.Abs(KingY - KillerY);
+                            tY = (KingY - KillerY) / Math.Abs(KingY - KillerY);
 
                         if (KingX - KillerX != 0)
-                            tX = (KingX - KillerX)/Math.Abs(KingX - KillerX);
+                            tX = (KingX - KillerX) / Math.Abs(KingX - KillerX);
 
                         while (fireArea[i - 2] + tX != KingX || fireArea[i - 1] + tY != KingY)
                         {
@@ -1351,6 +1364,11 @@ namespace ChessProject
         private void EndGame()
         {
             globalReader.Dispose();
+            if (OnlineGame)
+            {
+                MessageBox.Show("Вы проиграли!");
+                Environment.Exit(0);
+            }
             EndGame End = new EndGame();
             End.ShowDialog();
             Drawing();
@@ -1450,6 +1468,7 @@ namespace ChessProject
                 {
                     if (client.WhoIam != "w")
                     {
+                        Checkmate();
                         client.ReciveMessage();
                         if (client.WhoIam == "w")
                         {
@@ -1466,27 +1485,46 @@ namespace ChessProject
                         {
                             case "p":
                                 Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Pawn;
+                                Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                        ? Properties.Resources.PawnWhite
+                                        : Properties.Resources.PawnBlack;
                                 break;
                             case "r":
                                 Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Rook;
+                                Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                       ? Properties.Resources.RookWhite
+                                       : Properties.Resources.RookBlack;
                                 break;
                             case "n":
                                 Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Knigth;
+                                Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                        ? Properties.Resources.KnightWhite
+                                        : Properties.Resources.KnightBlack;
                                 break;
                             case "b":
                                 Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Bishop;
+                                Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                        ? Properties.Resources.BishopWhite
+                                        : Properties.Resources.BishopBlack;
                                 break;
                             case "q":
                                 Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Queen;
+                                Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                        ? Properties.Resources.QueenWhite
+                                        : Properties.Resources.QueenBlack;
                                 break;
                             case "k":
                                 Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.King;
+                                Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                        ? Properties.Resources.KingWhite
+                                        : Properties.Resources.KingBlack;
                                 break;
                         }
                     }
                 }
                 else
                 {
+                    Checkmate();
                     client.ReciveMessage();
                     if (client.WhoIam == "w")
                     {
@@ -1503,21 +1541,39 @@ namespace ChessProject
                     {
                         case "p":
                             Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Pawn;
+                            Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                    ? Properties.Resources.PawnWhite
+                                    : Properties.Resources.PawnBlack;
                             break;
                         case "r":
                             Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Rook;
+                            Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                   ? Properties.Resources.RookWhite
+                                   : Properties.Resources.RookBlack;
                             break;
                         case "n":
                             Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Knigth;
+                            Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                    ? Properties.Resources.KnightWhite
+                                    : Properties.Resources.KnightBlack;
                             break;
                         case "b":
                             Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Bishop;
+                            Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                    ? Properties.Resources.BishopWhite
+                                    : Properties.Resources.BishopBlack;
                             break;
                         case "q":
                             Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.Queen;
+                            Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                    ? Properties.Resources.QueenWhite
+                                    : Properties.Resources.QueenBlack;
                             break;
                         case "k":
                             Cells[client.readNewY, client.readNewX].ChessmanType = Cell.Chessman.King;
+                            Cells[client.readNewY, client.readNewX].BackgroundImage = (Enemy == Cell.Color.White)
+                                    ? Properties.Resources.KingWhite
+                                    : Properties.Resources.KingBlack;
                             break;
                     }
                 }
@@ -1551,13 +1607,12 @@ namespace ChessProject
                         {
                             firstClick = true;
                             Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
-                            Checkmate();
                             Cells[currentY, currentX].BackColor = color;
-                            if (currentX == cell.ColumnNumber && currentY == cell.LineNumber)
-                            ;
+                            if (currentX == cell.ColumnNumber && currentY == cell.LineNumber || WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber) == "")
+                                ;
                             else
                                 client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
-                                    currentY, cell.ColumnNumber, cell.LineNumber);
+                                currentY, cell.ColumnNumber, cell.LineNumber);
                         }
                     }
                 }
@@ -1670,10 +1725,10 @@ namespace ChessProject
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    MarkerA[i + 8*j].Dispose();
-                    MarkerN[i + 8*j].Dispose();
-                    MarkerA[i + 8*j] = null;
-                    MarkerN[i + 8*j] = null;
+                    MarkerA[i + 8 * j].Dispose();
+                    MarkerN[i + 8 * j].Dispose();
+                    MarkerA[i + 8 * j] = null;
+                    MarkerN[i + 8 * j] = null;
                 }
             }
             globalReader.Dispose();
