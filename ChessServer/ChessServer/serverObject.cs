@@ -13,7 +13,7 @@ namespace ChessServer
     {
         private int Counter = 0;
         static TcpListener tcpListener;
-        List<ClientObject> clients = new List<ClientObject>();
+        public List<ClientObject> clients = new List<ClientObject>();
 
         protected internal void AddConnection(ClientObject clientObject)
         {
