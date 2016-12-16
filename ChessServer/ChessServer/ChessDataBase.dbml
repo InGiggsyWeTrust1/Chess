@@ -6,6 +6,7 @@
       <Column Name="Number" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Course" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
       <Column Name="GameID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WhoGone" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="T_Game_T_Course" Member="T_Game" ThisKey="GameID" OtherKey="Id" Type="T_Game" IsForeignKey="true" />
     </Type>
   </Table>

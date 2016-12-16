@@ -2,43 +2,43 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="ChessDataBase">
   <DataContextMoniker Name="/ChessDataBaseDataContext" />
   <nestedChildShapes>
-    <classShape Id="af1809eb-9bf5-4cfc-9c1f-45a5554d86fb" absoluteBounds="6.25, 0.875, 2, 1.5785953776041666">
+    <classShape Id="e1cb1b5e-a476-472a-8116-14b9b25090f3" absoluteBounds="6.875, 1, 2, 1.7708968098958333">
       <DataClassMoniker Name="/ChessDataBaseDataContext/T_Course" />
       <nestedChildShapes>
-        <elementListCompartment Id="8ec90c2c-c92d-4a01-adf4-e920b82a939d" absoluteBounds="6.265, 1.335, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="0225ca14-babf-4d46-aad8-e090884ad27a" absoluteBounds="6.89, 1.46, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="9c0ed676-7580-4d01-8dca-d990c83a46c9" absoluteBounds="0.75, 1.125, 2, 1.1939925130208338">
+    <classShape Id="695c9a36-4341-4c9d-946c-3af08fe16839" absoluteBounds="0.75, 1.25, 2, 1.1939925130208338">
       <DataClassMoniker Name="/ChessDataBaseDataContext/T_User" />
       <nestedChildShapes>
-        <elementListCompartment Id="326c77c0-1fda-40d7-9d71-131fabf670fb" absoluteBounds="0.765, 1.585, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="e27e2574-fb6e-430b-a17d-c511da826dd9" absoluteBounds="0.765, 1.71, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="ea28bcfe-5ab4-45dd-af21-9be38c822848" absoluteBounds="3.5, 1, 2, 1.3862939453124998">
+    <classShape Id="20634843-6965-4d4f-b0ca-d6774ce053b4" absoluteBounds="3.625, 1.25, 2, 1.3862939453124998">
       <DataClassMoniker Name="/ChessDataBaseDataContext/T_Game" />
       <nestedChildShapes>
-        <elementListCompartment Id="b87d86ec-01ca-4e3a-86b2-248cb35ff357" absoluteBounds="3.515, 1.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="90ca5df8-2af1-4ad9-b02c-eba5b7cd2d87" absoluteBounds="3.64, 1.71, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5.5 : 1.69314697265625); (6.25 : 1.69314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.625 : 1.94314697265625); (6.875 : 1.94314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/ChessDataBaseDataContext/T_Game/T_Game_T_Course" />
       <nodes>
-        <classShapeMoniker Id="ea28bcfe-5ab4-45dd-af21-9be38c822848" />
-        <classShapeMoniker Id="af1809eb-9bf5-4cfc-9c1f-45a5554d86fb" />
+        <classShapeMoniker Id="20634843-6965-4d4f-b0ca-d6774ce053b4" />
+        <classShapeMoniker Id="e1cb1b5e-a476-472a-8116-14b9b25090f3" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 1.72199625651042); (3.5 : 1.72199625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 1.84699625651042); (3.625 : 1.84699625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/ChessDataBaseDataContext/T_User/T_User_T_Game" />
       <nodes>
-        <classShapeMoniker Id="9c0ed676-7580-4d01-8dca-d990c83a46c9" />
-        <classShapeMoniker Id="ea28bcfe-5ab4-45dd-af21-9be38c822848" />
+        <classShapeMoniker Id="695c9a36-4341-4c9d-946c-3af08fe16839" />
+        <classShapeMoniker Id="20634843-6965-4d4f-b0ca-d6774ce053b4" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 1.36099812825521); (3.5 : 1.36099812825521)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 1.48599812825521); (3.625 : 1.48599812825521)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/ChessDataBaseDataContext/T_User/T_User_T_Game1" />
       <nodes>
-        <classShapeMoniker Id="9c0ed676-7580-4d01-8dca-d990c83a46c9" />
-        <classShapeMoniker Id="ea28bcfe-5ab4-45dd-af21-9be38c822848" />
+        <classShapeMoniker Id="695c9a36-4341-4c9d-946c-3af08fe16839" />
+        <classShapeMoniker Id="20634843-6965-4d4f-b0ca-d6774ce053b4" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

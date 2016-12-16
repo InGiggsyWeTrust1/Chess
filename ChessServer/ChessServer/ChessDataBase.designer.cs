@@ -110,6 +110,8 @@ namespace ChessServer
 		
 		private int _GameID;
 		
+		private int _WhoGone;
+		
 		private EntityRef<T_Game> _T_Game;
 		
     #region Extensibility Method Definitions
@@ -124,6 +126,8 @@ namespace ChessServer
     partial void OnCourseChanged();
     partial void OnGameIDChanging(int value);
     partial void OnGameIDChanged();
+    partial void OnWhoGoneChanging(int value);
+    partial void OnWhoGoneChanged();
     #endregion
 		
 		public T_Course()
@@ -212,6 +216,26 @@ namespace ChessServer
 					this._GameID = value;
 					this.SendPropertyChanged("GameID");
 					this.OnGameIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WhoGone", DbType="Int NOT NULL")]
+		public int WhoGone
+		{
+			get
+			{
+				return this._WhoGone;
+			}
+			set
+			{
+				if ((this._WhoGone != value))
+				{
+					this.OnWhoGoneChanging(value);
+					this.SendPropertyChanging();
+					this._WhoGone = value;
+					this.SendPropertyChanged("WhoGone");
+					this.OnWhoGoneChanged();
 				}
 			}
 		}

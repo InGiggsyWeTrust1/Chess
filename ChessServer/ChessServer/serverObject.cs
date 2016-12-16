@@ -13,7 +13,7 @@ namespace ChessServer
     {
         private int Counter = 0;
         static TcpListener tcpListener;
-        List<ClientObject> clients = new List<ClientObject>();
+        public List<ClientObject> clients = new List<ClientObject>();
 
         protected internal void AddConnection(ClientObject clientObject)
         {
@@ -48,6 +48,7 @@ namespace ChessServer
             }
             catch (Exception ex)
             {
+                Console.Write("Listen(): ");
                 Console.WriteLine(ex.Message);
                 Console.ReadKey();
                 Disconnect();
