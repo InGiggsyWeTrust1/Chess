@@ -1442,20 +1442,27 @@ namespace ChessProject
 
         private string WhatIsThisStatuete(int x, int y)
         {
-            switch (Cells[y, x].ChessmanType)
+            if (Iam == Cells[y, x].ChessmanColor)
             {
-                case Cell.Chessman.Knigth:
-                    return "n";
-                case Cell.Chessman.Pawn:
-                    return "p";
-                case Cell.Chessman.Rook:
-                    return "r";
-                case Cell.Chessman.Bishop:
-                    return "b";
-                case Cell.Chessman.Queen:
-                    return "q";
-                case Cell.Chessman.King:
-                    return "k";
+                ;
+            }
+            else
+            {
+                switch (Cells[y, x].ChessmanType)
+                {
+                    case Cell.Chessman.Knigth:
+                        return "n";
+                    case Cell.Chessman.Pawn:
+                        return "p";
+                    case Cell.Chessman.Rook:
+                        return "r";
+                    case Cell.Chessman.Bishop:
+                        return "b";
+                    case Cell.Chessman.Queen:
+                        return "q";
+                    case Cell.Chessman.King:
+                        return "k";
+                }
             }
             return "";
         }
