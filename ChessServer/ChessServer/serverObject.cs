@@ -48,6 +48,7 @@ namespace ChessServer
             }
             catch (Exception ex)
             {
+                Console.Write("Listen(): ");
                 Console.WriteLine(ex.Message);
                 Console.ReadKey();
                 Disconnect();
