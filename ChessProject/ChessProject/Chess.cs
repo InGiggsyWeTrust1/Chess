@@ -1492,6 +1492,7 @@ namespace ChessProject
                             Iam = Cell.Color.White;
                             Enemy = Cell.Color.Black;
                         }
+                        //Checkmate();
                         Move(client.readCurrentX, client.readCurrentY, client.readNewX, client.readNewY);
                         switch (client.WhatIsThisStatuete)
                         {
@@ -1548,6 +1549,7 @@ namespace ChessProject
                         Iam = Cell.Color.White;
                         Enemy = Cell.Color.Black;
                     }
+                    //Checkmate();
                     Move(client.readCurrentX, client.readCurrentY, client.readNewX, client.readNewY);
                     switch (client.WhatIsThisStatuete)
                     {
@@ -1620,6 +1622,7 @@ namespace ChessProject
                             {
                                 firstClick = true;
                                 Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
+                                Checkmate();
                                 Cells[currentY, currentX].BackColor = color;
                                 if (currentX == cell.ColumnNumber && currentY == cell.LineNumber || WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber) == "")
                                     ;
