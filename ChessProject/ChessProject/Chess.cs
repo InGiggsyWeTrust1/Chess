@@ -30,6 +30,7 @@ namespace ChessProject
         private bool IpValidation = false;
         public static string ServerIp { get; private set; } // IP сервера
         public static string PlayerName { get; private set; } // Имя игрока 
+        private bool CellwaitMassegeBox = true;
 
         private Cell[,] Cells = new Cell[8, 8]; //Шахматная доска
 
@@ -1198,7 +1199,11 @@ namespace ChessProject
                 if (IsShah)
                 {
                     if (OnlineGame)
+                    {
+                        CellwaitMassegeBox = false;
                         MessageBox.Show("ВАМ ОБЪЯВЛЕН ШAX");
+                        CellwaitMassegeBox = true;
+                    }
                     else
                         MessageBox.Show("ШAX");
                     bool DefenderExisist = ExistKingDefender(kingX, kingY);
@@ -1599,27 +1604,29 @@ namespace ChessProject
                 Cell cell = sender as Cell;
                 if (OnlineGame)
                 {
-                    if ((client.WhoIam == "w" && Iam == Cell.Color.White) ||
-                        (client.WhoIam == "b" && Iam == Cell.Color.Black && !client.MyFirstStep))
-                    {
-                        if (firstClick && Iam == cell.ChessmanColor)
+                    if (CellwaitMassegeBox) {
+                        if ((client.WhoIam == "w" && Iam == Cell.Color.White) ||
+                            (client.WhoIam == "b" && Iam == Cell.Color.Black && !client.MyFirstStep))
                         {
-                            currentX = cell.ColumnNumber;
-                            currentY = cell.LineNumber;
-                            firstClick = false;
-                            color = Cells[currentY, currentX].BackColor;
-                            Cells[currentY, currentX].BackColor = Color.LightSkyBlue;
-                        }
-                        else if (!firstClick)
-                        {
-                            firstClick = true;
-                            Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
-                            Cells[currentY, currentX].BackColor = color;
-                            if (currentX == cell.ColumnNumber && currentY == cell.LineNumber || WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber) == "")
-                                ;
-                            else
-                                client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
-                                currentY, cell.ColumnNumber, cell.LineNumber);
+                            if (firstClick && Iam == cell.ChessmanColor)
+                            {
+                                currentX = cell.ColumnNumber;
+                                currentY = cell.LineNumber;
+                                firstClick = false;
+                                color = Cells[currentY, currentX].BackColor;
+                                Cells[currentY, currentX].BackColor = Color.LightSkyBlue;
+                            }
+                            else if (!firstClick)
+                            {
+                                firstClick = true;
+                                Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
+                                Cells[currentY, currentX].BackColor = color;
+                                if (currentX == cell.ColumnNumber && currentY == cell.LineNumber || WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber) == "")
+                                    ;
+                                else
+                                    client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
+                                    currentY, cell.ColumnNumber, cell.LineNumber);
+                            }
                         }
                     }
                 }
