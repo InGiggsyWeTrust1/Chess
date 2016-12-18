@@ -1206,17 +1206,24 @@ namespace ChessProject
                     }
                     else
                         MessageBox.Show("ШAX");
+
                     bool DefenderExisist = ExistKingDefender(kingX, kingY);
 
-                    if (quantityKiller == 1 && quantityEmpty == 0 &&
-                        !ValidationMove(kingX, kingY, fireArea[0], fireArea[1]) &&
-                        !DefenderExisist)
+                    int dz;
+
+                    bool KingCanAttack = ValidationMove(kingX, kingY, fireArea[0], fireArea[1]) && !CheckAttack(fireArea[0], fireArea[1], out dz);
+
+                    if (quantityKiller == 1 && quantityEmpty == 0 && 
+                        !KingCanAttack &&                    
+                        !DefenderExisist )
+                        EndGame();
+
+                    if (quantityKiller >= 2 && quantityEmpty == 0)
                         EndGame();
                 }
 
 
-                if (quantityKiller >= 2)
-                    EndGame();
+                
             }
             catch (Exception ex)
             {
@@ -1428,8 +1435,8 @@ namespace ChessProject
                                 if (ValidationMove(j, i, fireArea[k], fireArea[k + 1]))
                                     result = true;
 
-                if (ValidationMove(kingX, kingY, fireArea[0], fireArea[1]))
-                    result = true;
+               /* if (ValidationMove(kingX, kingY, fireArea[0], fireArea[1]))
+                    result = true;*/
 
                 /*if (!result)
                 {
