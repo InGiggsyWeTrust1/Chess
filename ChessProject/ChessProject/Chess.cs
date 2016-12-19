@@ -597,6 +597,8 @@ namespace ChessProject
                    Cells[previosY, previosX - 2].ChessmanType == Cell.Chessman.Null && !CheckAttack(previosX - 2, newY) &&
                    Cells[previosY, previosX - 3].ChessmanType == Cell.Chessman.Null &&
                    Cells[previosY, previosX - 4].StatuatteFirstStep == Cell.FirstStep.Yes))))
+
+            if(!CheckAttackNeo(newX,newY))
             {
                 if (BKingPosX == WKingPosX)
                 {
@@ -1263,6 +1265,49 @@ namespace ChessProject
                     result = true;
                 if (quantityKiller == 1)
                     СreateTrajectory(KillerPosX, KillerPosY, newX, newY);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Log.Info("При ошибке вернется false!\n");
+                Log.Info("CheckAttack(); ", ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Тот же чекатак только без создания траектории и адаптированый под короля
+        /// </summary>
+        /// <param name="newX">Проверяемая клетка Х</param>
+        /// <param name="newY">Проверяемая клетка Y</param>
+        /// <returns>true если клетку может аттаковать враг</returns>
+        private bool CheckAttackNeo(int newX, int newY)
+        {
+            int quantityKiller = 0;
+            try
+            {
+                bool result = false;
+                for (int i = 0; i < 8; i++)
+                    for (int j = 0; j < 8; j++)
+                        if (Cells[i, j].ChessmanColor == Enemy)
+                        {
+                            if(Cells[i,j].ChessmanType == Cell.Chessman.King)
+                            {
+                                if(Math.Abs(newY-i)<=1 && Math.Abs(newX - j) <= 1)
+                                    quantityKiller++;
+                            }
+                            else
+                            {
+                                SwapColor();
+                                if (ValidationMove(j, i, newX, newY))
+                                {
+                                    quantityKiller++;
+                                }
+                                SwapColor();
+                            }                            
+                        }
+                if (quantityKiller != 0)
+                    result = true;
                 return result;
             }
             catch (Exception ex)
