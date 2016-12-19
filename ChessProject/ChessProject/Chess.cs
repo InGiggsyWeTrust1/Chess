@@ -1433,7 +1433,8 @@ namespace ChessProject
                         if (Cells[i, j].ChessmanColor == Iam && Cells[i, j].ChessmanType != Cell.Chessman.King)
                             for (int k = 0; k < fireArea.Count; k += 2)
                                 if (ValidationMove(j, i, fireArea[k], fireArea[k + 1]))
-                                    result = true;
+                                    if(!TraitorChackmate(j, i, fireArea[k], fireArea[k + 1]))
+                                        result = true;
 
                /* if (ValidationMove(kingX, kingY, fireArea[0], fireArea[1]))
                     result = true;*/
