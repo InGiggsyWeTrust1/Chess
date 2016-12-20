@@ -59,7 +59,7 @@ namespace ChessProject
         public void ParsingWrightStep(string typeStatuatte, int previosX, int previosY, int newX, int newY)
         {
             char[] alpha = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
-            writeStep = WhoIam + alpha[previosX].ToString() + (previosY + 1).ToString() + alpha[newX].ToString() + (newY + 1).ToString() + typeStatuatte;
+            writeStep = WhoIam + alpha[previosX].ToString() + (8 - previosY).ToString() + alpha[newX].ToString() + (8 - newY).ToString() + typeStatuatte;
         }
         public void SendMessage(string typeStatuatte, int previosX, int previosY, int newX, int newY)
         {
@@ -176,9 +176,9 @@ namespace ChessProject
                     else if (i == 2 || i == 4)
                     {
                         if (i == 2)
-                            readCurrentY = Convert.ToInt32(data[i].ToString()) - 1;
+                            readCurrentY = 8 - Convert.ToInt32(data[i].ToString());
                         else
-                            readNewY = Convert.ToInt32(data[i].ToString()) - 1;
+                            readNewY = 8 - Convert.ToInt32(data[i].ToString());
                     }
                 }
                 switch (data[5].ToString())
