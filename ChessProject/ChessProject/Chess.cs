@@ -1695,6 +1695,7 @@ namespace ChessProject
                             else if (!firstClick)
                             {
                                 firstClick = true;
+                                Validation = false;
                                 Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
                                 Cells[currentY, currentX].BackColor = color;
                                 if (Validation)
@@ -1703,7 +1704,6 @@ namespace ChessProject
                                     currentY, cell.ColumnNumber, cell.LineNumber);
                                     client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
                                     currentY, cell.ColumnNumber, cell.LineNumber);
-                                    Validation = false;
                                 }
                             }
                         }
@@ -1722,6 +1722,7 @@ namespace ChessProject
                     else if (!firstClick)
                     {
                         firstClick = true;
+                        Validation = false;
                         Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
                         Checkmate();
                         Cells[currentY, currentX].BackColor = color;
@@ -1729,7 +1730,6 @@ namespace ChessProject
                         {
                             FigureCourses(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
                             currentY, cell.ColumnNumber, cell.LineNumber);
-                            Validation = false;
                         }
                     }
                 }
