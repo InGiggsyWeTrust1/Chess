@@ -1083,7 +1083,7 @@ namespace ChessProject
             {
                 if (Iam == Cells[newY, newX].ChessmanColor)
                 {
-                    ;
+                    Validation = false;
                 }
                 else
                     switch (Cells[previosY, previosX].ChessmanType)
