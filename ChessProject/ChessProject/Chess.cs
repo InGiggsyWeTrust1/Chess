@@ -1696,11 +1696,12 @@ namespace ChessProject
                             {
                                 firstClick = true;
                                 Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
-                                //Checkmate();
                                 Cells[currentY, currentX].BackColor = color;
                                 if (Validation)
                                 {
                                     FigureCourses(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
+                                    currentY, cell.ColumnNumber, cell.LineNumber);
+                                    client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
                                     currentY, cell.ColumnNumber, cell.LineNumber);
                                     Validation = false;
                                 }
