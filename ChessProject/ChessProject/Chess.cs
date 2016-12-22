@@ -40,6 +40,7 @@ namespace ChessProject
 
         private int VNP = 0; // Флажок для отслеживания следующего хода, когда активировано взятие на проходе
         private bool forValidation = false; // Флажок, показывающий пройденную валидацию (относится к взятию на проходе)
+        private bool Validation = false; // Флажок, показывающий, что валидация прошла успешна
 
         private bool inCheckmate = false;
         // Флажок, показывающий, что функция "Checkmate(...)" начала выполнение (относиться к взятию на проходе) 
@@ -359,7 +360,6 @@ namespace ChessProject
                     Cells[previosY, previosX].ChessmanType = Cell.Chessman.Null;
                     Cells[previosY, previosX].ChessmanColor = Cell.Color.Null;
                     SwapColor();
-
                     globalReader.WriteStep(previosX, previosY, newX, newY);
                 }
             }
@@ -615,7 +615,7 @@ namespace ChessProject
                   (previosX == newX && Math.Abs(previosY - newY) == 1) ||
                   (Math.Abs(previosY - newY) == 1 && Math.Abs(previosX - newX) == 1)) &&
                  ((Cells[newY, newX].ChessmanType == Cell.Chessman.Null && !CheckAttack(newX, newY)) ||
-                  Cells[newY, newX].ChessmanColor == Enemy)) ||
+                  Cells[newY, newX].ChessmanColor == Enemy && !CheckAttack(newX, newY))) ||
                 (Cells[previosY, previosX].StatuatteFirstStep == Cell.FirstStep.Yes && Math.Abs(newX - previosX) == 2 &&
                  previosY == newY && !CheckAttack(previosX, previosY, out x) &&
                  ((Cells[previosY, previosX + 1].ChessmanType == Cell.Chessman.Null && !CheckAttack(previosX + 1, newY) &&
@@ -892,6 +892,7 @@ namespace ChessProject
                 {
                     Movement(previosX, previosY, newX, newY);
                     forValidation = true;
+                    Validation = true;
                 }
             }
             catch (Exception ex)
@@ -920,11 +921,13 @@ namespace ChessProject
                     {
                         MovementEnPassant(previosX, previosY, newX, newY);
                         forValidation = true;
+                        Validation = true;
                     }
                     else
                     {
                         Movement(previosX, previosY, newX, newY);
                         forValidation = true;
+                        Validation = true;
                         if (OnlineGame)
                         {
                             if (newY == 0 && Cells[newY, newX].ChessmanColor == Cell.Color.White && client.WhoIam == "w")
@@ -963,6 +966,7 @@ namespace ChessProject
                 {
                     Movement(previosX, previosY, newX, newY);
                     forValidation = true;
+                    Validation = true;
                 }
             }
             catch (Exception ex)
@@ -986,6 +990,7 @@ namespace ChessProject
                 {
                     Movement(previosX, previosY, newX, newY);
                     forValidation = true;
+                    Validation = true;
                 }
             }
             catch (Exception ex)
@@ -1013,11 +1018,13 @@ namespace ChessProject
                         {
                             forValidation = true;
                             CastlinMovment(previosX, previosY, newX, newY);
+                            Validation = true;
                         }
                         else
                         {
                             forValidation = true;
                             Movement(previosX, previosY, newX, newY);
+                            Validation = true;
                         }
                         if (Cells[newY, newX].ChessmanColor == Cell.Color.White)
                         {
@@ -1053,6 +1060,7 @@ namespace ChessProject
                 {
                     Movement(previosX, previosY, newX, newY);
                     forValidation = true;
+                    Validation = true;
                 }
             }
             catch (Exception ex)
@@ -1365,19 +1373,41 @@ namespace ChessProject
                             }
                             else if (Cells[j, i].ChessmanType == Cell.Chessman.Pawn)
                             {
-                                Cells[newY, newX].ChessmanType = Cell.Chessman.King;
-                                Cells[newY, newX].ChessmanColor = Iam;
-                                SwapColor();
-                                if (ValidationMove(i, j, newX, newY) == true
-
-                                    /*&& Cells[j, i].Chessman != Cell.Chessman.Pawn*/)
-
+                                if (Cells[newY, newX].ChessmanType != Cell.Chessman.Null)
                                 {
-                                    quantityKiller++;
+                                    Cell.Color tempColorEnemy = Cells[newY, newX].ChessmanColor;
+                                    Cell.Chessman tempChessmanEnemy = Cells[newY, newX].ChessmanType;
+
+                                    Cells[newY, newX].ChessmanType = Cell.Chessman.King;
+                                    Cells[newY, newX].ChessmanColor = Iam;
+                                    SwapColor();
+                                    if (ValidationMove(i, j, newX, newY) == true
+
+                                        /*&& Cells[j, i].Chessman != Cell.Chessman.Pawn*/)
+
+                                    {
+                                        quantityKiller++;
+                                    }
+                                    SwapColor();
+                                    Cells[newY, newX].ChessmanType = tempChessmanEnemy;
+                                    Cells[newY, newX].ChessmanColor = tempColorEnemy;
                                 }
-                                SwapColor();
-                                Cells[newY, newX].ChessmanType = Cell.Chessman.Null;
-                                Cells[newY, newX].ChessmanColor = Cell.Color.Null;
+                                else
+                                {
+                                    Cells[newY, newX].ChessmanType = Cell.Chessman.King;
+                                    Cells[newY, newX].ChessmanColor = Iam;
+                                    SwapColor();
+                                    if (ValidationMove(i, j, newX, newY) == true
+
+                                        /*&& Cells[j, i].Chessman != Cell.Chessman.Pawn*/)
+
+                                    {
+                                        quantityKiller++;
+                                    }
+                                    SwapColor();
+                                    Cells[newY, newX].ChessmanType = Cell.Chessman.Null;
+                                    Cells[newY, newX].ChessmanColor = Cell.Color.Null;
+                                }
                             }
                         }
                 if (quantityKiller != 0)
@@ -1668,14 +1698,11 @@ namespace ChessProject
                                 Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
                                 //Checkmate();
                                 Cells[currentY, currentX].BackColor = color;
-                                if (currentX == cell.ColumnNumber && currentY == cell.LineNumber || WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber) == "")
-                                    ;
-                                else
+                                if (Validation)
                                 {
                                     FigureCourses(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
                                     currentY, cell.ColumnNumber, cell.LineNumber);
-                                    client.SendMessage(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
-                                    currentY, cell.ColumnNumber, cell.LineNumber);
+                                    Validation = false;
                                 }
                             }
                         }
@@ -1697,12 +1724,11 @@ namespace ChessProject
                         Move(currentX, currentY, cell.ColumnNumber, cell.LineNumber);
                         Checkmate();
                         Cells[currentY, currentX].BackColor = color;
-                        if (currentX == cell.ColumnNumber && currentY == cell.LineNumber || WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber) == "")
-                            ;
-                        else
+                        if (Validation)
                         {
                             FigureCourses(WhatIsThisStatuete(cell.ColumnNumber, cell.LineNumber), currentX,
                             currentY, cell.ColumnNumber, cell.LineNumber);
+                            Validation = false;
                         }
                     }
                 }
@@ -1807,6 +1833,7 @@ namespace ChessProject
             ChekemateActive = false;
             VNP = 0;
             forValidation = false;
+            Validation = false;
             inCheckmate = false;
             firstClick = true;
             emptyPath = 1;
