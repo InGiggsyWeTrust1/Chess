@@ -33,18 +33,19 @@ namespace ChessServer
             serverObject.AddConnection(this);
         }
 
-        /*private void WriteUsernameToDb(ClientObject client)
+        private void WriteUsernameToDb(ClientObject client)
         {
             try
             {
                 if (client == null) return;
                 using (var db = new ChessDataBaseDataContext())
                 {
+                    if (client.Username.Length > 21) return;
                     var newPlayer = new T_User
                     {
                         Nickname = client.Username
                     };
-
+                    
                     db.T_Users.InsertOnSubmit(newPlayer);
                     db.SubmitChanges();
                 }
@@ -135,7 +136,7 @@ namespace ChessServer
                 Console.WriteLine(ex.Message);
                 Console.ReadKey();
             }
-        }*/
+        }
 
         public void Process()
         {
@@ -147,14 +148,15 @@ namespace ChessServer
                 string message = GetMessage();
                 Username = message;
 
-                //WriteUsernameToDb(this);
+                
+                WriteUsernameToDb(this);
 
                 message = WhoIam;
                 server.BroadcastMessage(message, this.Id);
                 Console.WriteLine("{0}: присоединился к игре!", Username);
 
-                //T_Game game = NewGameToDb();
-                //if (game != null) _gameIsCreated = true;
+                T_Game game = NewGameToDb();
+                if (game != null) _gameIsCreated = true;
 
                 while (true)
                 { 
@@ -164,12 +166,12 @@ namespace ChessServer
                    
                         //message = String.Format(message);
 
-                        /*if (!_gameIsCreated) {
+                        if (!_gameIsCreated) {
                             game = NewGameToDb();
                             _gameIsCreated = true;
                         }
                         AddStepGame(message, game);
-                        */
+                        
 
                         serverMessage = String.Format("{0}: {1}", Username, message);
                         Console.WriteLine(serverMessage);
