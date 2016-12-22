@@ -38,6 +38,7 @@ namespace ChessServer
 
                 while (true)
                 {
+                    if(clients.Count == 2) continue;
                     TcpClient tcpClient = tcpListener.AcceptTcpClient();
 
                     ClientObject clientObject = new ClientObject(tcpClient, this, Counter);

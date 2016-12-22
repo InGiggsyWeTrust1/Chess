@@ -71,6 +71,8 @@ namespace ChessProject
 
         private bool IsShah = false; //Если значение true то объявлен шах
 
+        private bool kingBool = true;
+
         Color color;
 
         private Cell.Color Iam = Cell.Color.White;
@@ -611,6 +613,17 @@ namespace ChessProject
         private bool KingValidation(int previosX, int previosY, int newX, int newY)
         {
             int x;
+            if (!kingBool)
+            {
+                if (((previosY == newY && Math.Abs(previosX - newX) == 1) ||
+                      (previosX == newX && Math.Abs(previosY - newY) == 1) ||
+                      (Math.Abs(previosY - newY) == 1 && Math.Abs(previosX - newX) == 1)) &&
+                     ((Cells[newY, newX].ChessmanType == Cell.Chessman.Null) ||
+                      Cells[newY, newX].ChessmanColor == Enemy))
+                {
+                    return true;
+                }
+            }
             if ((((previosY == newY && Math.Abs(previosX - newX) == 1) ||
                   (previosX == newX && Math.Abs(previosY - newY) == 1) ||
                   (Math.Abs(previosY - newY) == 1 && Math.Abs(previosX - newX) == 1)) &&
@@ -1253,8 +1266,6 @@ namespace ChessProject
                         EndGame();
                 }
 
-
-
             }
             catch (Exception ex)
             {
@@ -1364,7 +1375,9 @@ namespace ChessProject
                     for (int j = 0; j < 8; j++)
                         if (Cells[j, i].ChessmanColor == Enemy)
                         {
-                            if (Cells[j, i].ChessmanType == Cell.Chessman.King) continue;
+                            if (Cells[j, i].ChessmanType == Cell.Chessman.King && !kingBool) continue;
+
+                            if (Cells[j, i].ChessmanType == Cell.Chessman.King) kingBool = false;
 
                             if (ValidationMove(i, j, newX, newY) == true &&
                                 Cells[j, i].ChessmanType != Cell.Chessman.Pawn)
@@ -1412,6 +1425,8 @@ namespace ChessProject
                         }
                 if (quantityKiller != 0)
                     result = true;
+
+                kingBool = true;
                 return result;
             }
 

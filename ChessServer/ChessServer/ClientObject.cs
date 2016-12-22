@@ -40,7 +40,7 @@ namespace ChessServer
                 if (client == null) return;
                 using (var db = new ChessDataBaseDataContext())
                 {
-                    if (client.Username.Length > 21) return;
+                    if (client.Username.Length > 21 || client.Username.Length == 0) return;
                     var newPlayer = new T_User
                     {
                         Nickname = client.Username
